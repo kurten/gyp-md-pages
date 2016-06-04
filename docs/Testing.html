@@ -1,0 +1,587 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <title>Testing · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.0.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="GypVsCMake.html" />
+    
+    
+    <link rel="prev" href="Hacking.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Readme
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="UserDocumentation.html">
+            
+                <a href="UserDocumentation.html">
+            
+                    
+                    User documentation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="InputFormatReference.html">
+            
+                <a href="InputFormatReference.html">
+            
+                    
+                    Input Format Reference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="LanguageSpecification.html">
+            
+                <a href="LanguageSpecification.html">
+            
+                    
+                    Language specification
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="Hacking.html">
+            
+                <a href="Hacking.html">
+            
+                    
+                    Hacking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.6" data-path="Testing.html">
+            
+                <a href="Testing.html">
+            
+                    
+                    Testing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="GypVsCMake.html">
+            
+                <a href="GypVsCMake.html">
+            
+                    
+                    GYP vs. CMake
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Testing</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="testing">Testing</h1>
+<p>[TOC]</p>
+<h2 id="introduction">Introduction</h2>
+<p>This document describes the GYP testing infrastructure,
+as provided by the <code>TestGyp.py</code> module.</p>
+<p>These tests emphasize testing the <em>behavior</em> of the
+various GYP-generated build configurations:
+Visual Studio, Xcode, SCons, Make, etc.
+The goal is <em>not</em> to test the output of the GYP generators by,
+for example, comparing a GYP-generated Makefile
+against a set of known &quot;golden&quot; Makefiles
+(although the testing infrastructure could
+be used to write those kinds of tests).
+The idea is that the generated build configuration files
+could be completely written to add a feature or fix a bug
+so long as they continue to support the functional behaviors
+defined by the tests:  building programs, shared libraries, etc.</p>
+<h2 id="hello-world-gyp-test-configuration">&quot;Hello, world!&quot; GYP test configuration</h2>
+<p>Here is an actual test configuration,
+a simple build of a C program to print <code>&quot;Hello, world!&quot;</code>.</p>
+<pre><code>  $ ls -l test/hello
+  total 20
+  -rw-r--r-- 1 knight knight 312 Jul 30 20:22 gyptest-all.py
+  -rw-r--r-- 1 knight knight 307 Jul 30 20:22 gyptest-default.py
+  -rwxr-xr-x 1 knight knight 326 Jul 30 20:22 gyptest-target.py
+  -rw-r--r-- 1 knight knight  98 Jul 30 20:22 hello.c
+  -rw-r--r-- 1 knight knight 142 Jul 30 20:22 hello.gyp
+  $
+</code></pre><p>The <code>gyptest-*.py</code> files are three separate tests (test scripts)
+that use this configuration.  The first one, <code>gyptest-all.py</code>,
+looks like this:</p>
+<pre><code>  #!/usr/bin/env python
+
+  &quot;&quot;&quot;
+  Verifies simplest-possible build of a &quot;Hello, world!&quot; program
+  using an explicit build target of &apos;all&apos;.
+  &quot;&quot;&quot;
+
+  import TestGyp
+
+  test = TestGyp.TestGyp()
+
+  test.run_gyp(&apos;hello.gyp&apos;)
+
+  test.build_all(&apos;hello.gyp&apos;)
+
+  test.run_built_executable(&apos;hello&apos;, stdout=&quot;Hello, world!\n&quot;)
+
+  test.pass_test()
+</code></pre><p>The test script above runs GYP against the specified input file
+(<code>hello.gyp</code>) to generate a build configuration.
+It then tries to build the <code>&apos;all&apos;</code> target
+(or its equivalent) using the generated build configuration.
+Last, it verifies that the build worked as expected
+by running the executable program (<code>hello</code>)
+that was just presumably built by the generated configuration,
+and verifies that the output from the program
+matches the expected <code>stdout</code> string (<code>&quot;Hello, world!\n&quot;</code>).</p>
+<p>Which configuration is generated
+(i.e., which build tool to test)
+is specified when the test is run;
+see the next section.</p>
+<p>Surrounding the functional parts of the test
+described above are the header,
+which should be basically the same for each test
+(modulo a different description in the docstring):</p>
+<pre><code>  #!/usr/bin/env python
+
+  &quot;&quot;&quot;
+  Verifies simplest-possible build of a &quot;Hello, world!&quot; program
+  using an explicit build target of &apos;all&apos;.
+  &quot;&quot;&quot;
+
+  import TestGyp
+
+  test = TestGyp.TestGyp()
+</code></pre><p>Similarly, the footer should be the same in every test:</p>
+<pre><code>  test.pass_test()
+</code></pre><h2 id="running-tests">Running tests</h2>
+<p>Test scripts are run by the <code>gyptest.py</code> script.
+You can specify (an) explicit test script(s) to run:</p>
+<pre><code>  $ python gyptest.py test/hello/gyptest-all.py
+  PYTHONPATH=/home/knight/src/gyp/trunk/test/lib
+  TESTGYP_FORMAT=scons
+  /usr/bin/python test/hello/gyptest-all.py
+  PASSED
+  $
+</code></pre><p>If you specify a directory, all test scripts
+(scripts prefixed with <code>gyptest-</code>) underneath
+the directory will be run:</p>
+<pre><code>  $ python gyptest.py test/hello
+  PYTHONPATH=/home/knight/src/gyp/trunk/test/lib
+  TESTGYP_FORMAT=scons
+  /usr/bin/python test/hello/gyptest-all.py
+  PASSED
+  /usr/bin/python test/hello/gyptest-default.py
+  PASSED
+  /usr/bin/python test/hello/gyptest-target.py
+  PASSED
+  $
+</code></pre><p>Or you can specify the <code>-a</code> option to run all scripts
+in the tree:</p>
+<pre><code>  $ python gyptest.py -a
+  PYTHONPATH=/home/knight/src/gyp/trunk/test/lib
+  TESTGYP_FORMAT=scons
+  /usr/bin/python test/configurations/gyptest-configurations.py
+  PASSED
+  /usr/bin/python test/defines/gyptest-defines.py
+  PASSED
+      .
+      .
+      .
+      .
+  /usr/bin/python test/variables/gyptest-commands.py
+  PASSED
+  $
+</code></pre><p>If any tests fail during the run,
+the <code>gyptest.py</code> script will report them in a
+summary at the end.</p>
+<h2 id="debugging-tests">Debugging tests</h2>
+<p>Tests that create intermediate output do so under the gyp/out/testworkarea
+directory. On test completion, intermediate output is cleaned up. To preserve
+this output, set the environment variable PRESERVE=1. This can be handy to
+inspect intermediate data when debugging a test.</p>
+<p>You can also set PRESERVE_PASS=1, PRESERVE_FAIL=1 or PRESERVE_NO_RESULT=1
+to preserve output for tests that fall into one of those categories.</p>
+<h1 id="specifying-the-format-build-tool-to-use">Specifying the format (build tool) to use</h1>
+<p>By default, the <code>gyptest.py</code> script will generate configurations for
+the &quot;primary&quot; supported build tool for the platform you&apos;re on:
+Visual Studio on Windows,
+Xcode on Mac,
+and (currently) SCons on Linux.
+An alternate format (build tool) may be specified
+using the <code>-f</code> option:</p>
+<pre><code>  $ python gyptest.py -f make test/hello/gyptest-all.py
+  PYTHONPATH=/home/knight/src/gyp/trunk/test/lib
+  TESTGYP_FORMAT=make
+  /usr/bin/python test/hello/gyptest-all.py
+  PASSED
+  $
+</code></pre><p>Multiple tools may be specified in a single pass as
+a comma-separated list:</p>
+<pre><code>  $ python gyptest.py -f make,scons test/hello/gyptest-all.py
+  PYTHONPATH=/home/knight/src/gyp/trunk/test/lib
+  TESTGYP_FORMAT=make
+  /usr/bin/python test/hello/gyptest-all.py
+  PASSED
+  TESTGYP_FORMAT=scons
+  /usr/bin/python test/hello/gyptest-all.py
+  PASSED
+  $
+</code></pre><h2 id="test-script-functions-and-methods">Test script functions and methods</h2>
+<p>The <code>TestGyp</code> class contains a lot of functionality
+intended to make it easy to write tests.
+This section describes the most useful pieces for GYP testing.</p>
+<p>(The <code>TestGyp</code> class is actually a subclass of more generic
+<code>TestCommon</code> and <code>TestCmd</code> base classes
+that contain even more functionality than is
+described here.)</p>
+<h3 id="initialization">Initialization</h3>
+<p>The standard initialization formula is:</p>
+<pre><code>  import TestGyp
+  test = TestGyp.TestGyp()
+</code></pre><p>This copies the contents of the directory tree in which
+the test script lives to a temporary directory for execution,
+and arranges for the temporary directory&apos;s removal on exit.</p>
+<p>By default, any comparisons of output or file contents
+must be exact matches for the test to pass.
+If you need to use regular expressions for matches,
+a useful alternative initialization is:</p>
+<pre><code>  import TestGyp
+  test = TestGyp.TestGyp(match = TestGyp.match_re,
+                         diff = TestGyp.diff_re)`
+</code></pre><h3 id="running-gyp">Running GYP</h3>
+<p>The canonical invocation is to simply specify the <code>.gyp</code> file to be executed:</p>
+<pre><code>  test.run_gyp(&apos;file.gyp&apos;)
+</code></pre><p>Additional GYP arguments may be specified:</p>
+<pre><code>  test.run_gyp(&apos;file.gyp&apos;, arguments=[&apos;arg1&apos;, &apos;arg2&apos;, ...])
+</code></pre><p>To execute GYP from a subdirectory (where, presumably, the specified file
+lives):</p>
+<pre><code>  test.run_gyp(&apos;file.gyp&apos;, chdir=&apos;subdir&apos;)
+</code></pre><h3 id="running-the-build-tool">Running the build tool</h3>
+<p>Running the build tool requires passing in a <code>.gyp</code> file, which may be used to
+calculate the name of a specific build configuration file (such as a MSVS
+solution file corresponding to the <code>.gyp</code> file).</p>
+<p>There are several different <code>.build_*()</code> methods for invoking different types
+of builds.</p>
+<p>To invoke a build tool with an explicit <code>all</code> target (or equivalent):</p>
+<pre><code>  test.build_all(&apos;file.gyp&apos;)
+</code></pre><p>To invoke a build tool with its default behavior (for example, executing <code>make</code>
+with no targets specified):</p>
+<pre><code>  test.build_default(&apos;file.gyp&apos;)
+</code></pre><p>To invoke a build tool with an explicit specified target:</p>
+<pre><code>  test.build_target(&apos;file.gyp&apos;, &apos;target&apos;)
+</code></pre><h3 id="running-executables">Running executables</h3>
+<p>The most useful method executes a program built by the GYP-generated
+configuration:</p>
+<pre><code>  test.run_built_executable(&apos;program&apos;)
+</code></pre><p>The <code>.run_built_executable()</code> method will account for the actual built target
+output location for the build tool being tested, as well as tack on any
+necessary executable file suffix for the platform (for example <code>.exe</code> on
+Windows).</p>
+<p><code>stdout=</code> and <code>stderr=</code> keyword arguments specify expected standard output and
+error output, respectively.  Failure to match these (if specified) will cause
+the test to fail.  An explicit <code>None</code> value will suppress that verification:</p>
+<pre><code>  test.run_built_executable(&apos;program&apos;,
+                            stdout=&quot;expect this output\n&quot;,
+                            stderr=None)
+</code></pre><p>Note that the default values are <code>stdout=None</code> and <code>stderr=&apos;&apos;</code> (that is, no
+check for standard output, and error output must be empty).</p>
+<p>Arbitrary executables (not necessarily those built by GYP) can be executed with
+the lower-level <code>.run()</code> method:</p>
+<pre><code>  test.run(&apos;program&apos;)
+</code></pre><p>The program must be in the local directory (that is, the temporary directory
+for test execution) or be an absolute path name.</p>
+<h3 id="fetching-command-output">Fetching command output</h3>
+<pre><code>  test.stdout()
+</code></pre><p>Returns the standard output from the most recent executed command (including
+<code>.run_gyp()</code>, <code>.build_*()</code>, or <code>.run*()</code> methods).</p>
+<pre><code>  test.stderr()
+</code></pre><p>Returns the error output from the most recent executed command (including
+<code>.run_gyp()</code>, <code>.build_*()</code>, or <code>.run*()</code> methods).</p>
+<h3 id="verifying-existence-or-non-existence-of-files-or-directories">Verifying existence or non-existence of files or directories</h3>
+<pre><code>  test.must_exist(&apos;file_or_dir&apos;)
+</code></pre><p>Verifies that the specified file or directory exists, and fails the test if it
+doesn&apos;t.</p>
+<pre><code>  test.must_not_exist(&apos;file_or_dir&apos;)
+</code></pre><p>Verifies that the specified file or directory does not exist, and fails the
+test if it does.</p>
+<h3 id="verifying-file-contents">Verifying file contents</h3>
+<pre><code>  test.must_match(&apos;file&apos;, &apos;expected content\n&apos;)
+</code></pre><p>Verifies that the content of the specified file match the expected string, and
+fails the test if it does not.  By default, the match must be exact, but
+line-by-line regular expressions may be used if the <code>TestGyp</code> object was
+initialized with <code>TestGyp.match_re</code>.</p>
+<pre><code>  test.must_not_match(&apos;file&apos;, &apos;expected content\n&apos;)
+</code></pre><p>Verifies that the content of the specified file does <em>not</em> match the expected
+string, and fails the test if it does.  By default, the match must be exact,
+but line-by-line regular expressions may be used if the <code>TestGyp</code> object was
+initialized with <code>TestGyp.match_re</code>.</p>
+<pre><code>  test.must_contain(&apos;file&apos;, &apos;substring&apos;)
+</code></pre><p>Verifies that the specified file contains the specified substring, and fails
+the test if it does not.</p>
+<pre><code>  test.must_not_contain(&apos;file&apos;, &apos;substring&apos;)
+</code></pre><p>Verifies that the specified file does not contain the specified substring, and
+fails the test if it does.</p>
+<pre><code>  test.must_contain_all_lines(output, lines)
+</code></pre><p>Verifies that the output string contains all of the &quot;lines&quot; in the specified
+list of lines.  In practice, the lines can be any substring and need not be
+<code>\n</code>-terminaed lines per se.  If any line is missing, the test fails.</p>
+<pre><code>  test.must_not_contain_any_lines(output, lines)
+</code></pre><p>Verifies that the output string does <em>not</em> contain any of the &quot;lines&quot; in the
+specified list of lines.  In practice, the lines can be any substring and need
+not be <code>\n</code>-terminaed lines per se.  If any line exists in the output string,
+the test fails.</p>
+<pre><code>  test.must_contain_any_line(output, lines)
+</code></pre><p>Verifies that the output string contains at least one of the &quot;lines&quot; in the
+specified list of lines.  In practice, the lines can be any substring and need
+not be <code>\n</code>-terminaed lines per se.  If none of the specified lines is present,
+the test fails.</p>
+<h3 id="reading-file-contents">Reading file contents</h3>
+<pre><code>  test.read(&apos;file&apos;)
+</code></pre><p>Returns the contents of the specified file.  Directory elements contained in a
+list will be joined:</p>
+<pre><code>  test.read([&apos;subdir&apos;, &apos;file&apos;])
+</code></pre><h3 id="test-success-or-failure">Test success or failure</h3>
+<pre><code>  test.fail_test()
+</code></pre><p>Fails the test, reporting <code>FAILED</code> on standard output and exiting with an exit
+status of <code>1</code>.</p>
+<pre><code>  test.pass_test()
+</code></pre><p>Passes the test, reporting <code>PASSED</code> on standard output and exiting with an exit
+status of <code>0</code>.</p>
+<pre><code>  test.no_result()
+</code></pre><p>Indicates the test had no valid result (i.e., the conditions could not be
+tested because of an external factor like a full file system).  Reports <code>NO
+RESULT</code> on standard output and exits with a status of <code>2</code>.</p>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Hacking.html" class="navigation navigation-prev " aria-label="Previous page: Hacking">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="GypVsCMake.html" class="navigation navigation-next " aria-label="Next page: GYP vs. CMake">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Testing","level":"1.6","depth":1,"next":{"title":"GYP vs. CMake","level":"1.7","depth":1,"path":"docs/GypVsCMake.md","ref":"docs/GypVsCMake.md","articles":[]},"previous":{"title":"Hacking","level":"1.5","depth":1,"path":"docs/Hacking.md","ref":"docs/Hacking.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/Testing.md","mtime":"2016-06-04T08:29:47.000Z","type":"markdown"},"gitbook":{"version":"3.0.3","time":"2016-06-04T08:37:41.485Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/buttons.js"></script>
+        
+    
+
+    </body>
+</html>
+

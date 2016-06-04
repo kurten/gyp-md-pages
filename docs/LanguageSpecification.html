@@ -1,0 +1,721 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <title>Language specification · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.0.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="Hacking.html" />
+    
+    
+    <link rel="prev" href="InputFormatReference.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Readme
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="UserDocumentation.html">
+            
+                <a href="UserDocumentation.html">
+            
+                    
+                    User documentation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="InputFormatReference.html">
+            
+                <a href="InputFormatReference.html">
+            
+                    
+                    Input Format Reference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4" data-path="LanguageSpecification.html">
+            
+                <a href="LanguageSpecification.html">
+            
+                    
+                    Language specification
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="Hacking.html">
+            
+                <a href="Hacking.html">
+            
+                    
+                    Hacking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="Testing.html">
+            
+                <a href="Testing.html">
+            
+                    
+                    Testing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="GypVsCMake.html">
+            
+                <a href="GypVsCMake.html">
+            
+                    
+                    GYP vs. CMake
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Language specification</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="language-specification">Language Specification</h1>
+<p>[TOC]</p>
+<h2 id="objective">Objective</h2>
+<p>Create a tool for the Chromium project that generates native Visual Studio,
+Xcode and SCons and/or make build files from a platform-independent input
+format.  Make the input format as reasonably general as possible without
+spending extra time trying to &quot;get everything right,&quot; except where not doing so
+would likely lead Chromium to an eventual dead end.  When in doubt, do what
+Chromium needs and don&apos;t worry about generalizing the solution.</p>
+<h2 id="background">Background</h2>
+<p>Numerous other projects, both inside and outside Google, have tried to
+create a simple, universal cross-platform build representation that
+still allows sufficient per-platform flexibility to accommodate
+irreconcilable differences.  The fact that no obvious working candidate
+exists that meets Chromium&apos;s requirements indicates this is probably a
+tougher problem than it appears at first glance.  We aim to succeed by
+creating a tool that is highly specific to Chromium&apos;s specific use case,
+not to the general case of design a completely platform-independent tool
+for expressing any possible build.</p>
+<p>The Mac has the most sophisticated model for application development
+through an IDE.  Consequently, we will use the Xcode model as the
+starting point (the input file format must handle Chromium&apos;s use of
+Xcode seamlessly) and adapt the design as necessary for the other
+platforms.</p>
+<h2 id="overview">Overview</h2>
+<p>The overall design has the following characteristics:</p>
+<ul>
+<li>Input configurations are specified in files with the suffix <code>.gyp</code>.</li>
+<li>Each <code>.gyp</code> file specifies how to build the targets for the
+&quot;component&quot; defined by that file.</li>
+<li>Each <code>.gyp</code> file generates one or more output files appropriate to
+the platform:<ul>
+<li>On Mac, a <code>.gyp</code> file generates one Xcode .xcodeproj bundle with
+information about how its targets are built.</li>
+<li>On Windows, a <code>.gyp</code> file generates one Visual Studio .sln file,
+and one Visual Studio .vcproj file per target.</li>
+<li>On Linux, a <code>.gyp</code> file generates one SCons file and/or one
+Makefile per target</li>
+</ul>
+</li>
+<li>The <code>.gyp</code> file syntax is a Python data structure.</li>
+<li>Use of arbitrary Python in <code>.gyp</code> files is forbidden.<ul>
+<li>Use of eval() with restricted globals and locals on <code>.gyp</code> file
+contents restricts the input to an evaluated expression, not
+arbitrary Python statements.</li>
+<li>All input is expected to comply with JSON, with two exceptions:
+the # character (not inside strings) begins a comment that lasts
+until the end of the line, and trailing commas are permitted at
+the end of list and dict contents.</li>
+</ul>
+</li>
+<li>Input data is a dictionary of keywords and values.</li>
+<li>&quot;Invalid&quot; keywords on any given data structure are not illegal,
+they&apos;re just ignored.<ul>
+<li>TODO:  providing warnings on use of illegal keywords would help
+users catch typos.  Figure out something nice to do with this.</li>
+</ul>
+</li>
+</ul>
+<h2 id="detailed-design">Detailed Design</h2>
+<p>Some up-front design principles/thoughts/TODOs:</p>
+<ul>
+<li>Re-use keywords consistently.</li>
+<li>Keywords that allow configuration of a platform-specific concept get
+prefixed appropriately:<ul>
+<li>Examples:  <code>msvs_disabled_warnings</code>, <code>xcode_framework_dirs</code></li>
+</ul>
+</li>
+<li>The input syntax is declarative and data-driven.<ul>
+<li>This gets enforced by using Python <code>eval()</code> (which only evaluates
+an expression) instead of <code>exec</code> (which executes arbitrary python)</li>
+</ul>
+</li>
+<li>Semantic meanings of specific keyword values get deferred until all
+are read and the configuration is being evaluated to spit out the
+appropriate file(s)</li>
+<li>Source file lists:<ul>
+<li>Are flat lists.  Any imposed ordering within the <code>.gyp</code> file (e.g.
+alphabetically) is purely by convention and for developer
+convenience.  When source files are linked or archived together,
+it is expected that this will occur in the order that files are
+listed in the <code>.gyp</code> file.</li>
+<li>Source file lists contain no mechanism for by-hand folder
+configuration (<code>Filter</code> tags in Visual Studio, <code>Groups</code> in Xcode)</li>
+<li>A folder hierarchy is created automatically that mirrors the file
+system</li>
+</ul>
+</li>
+</ul>
+<h3 id="example">Example</h3>
+<pre><code>{
+  &apos;target_defaults&apos;: {
+    &apos;defines&apos;: [
+      &apos;U_STATIC_IMPLEMENTATION&apos;,
+      [&apos;LOGFILE&apos;, &apos;foo.log&apos;,],
+    ],
+    &apos;include_dirs&apos;: [
+      &apos;..&apos;,
+    ],
+  },
+  &apos;targets&apos;: [
+    {
+      &apos;target_name&apos;: &apos;foo&apos;,
+      &apos;type&apos;: &apos;static_library&apos;,
+      &apos;sources&apos;: [
+        &apos;foo/src/foo.cc&apos;,
+        &apos;foo/src/foo_main.cc&apos;,
+      ],
+      &apos;include_dirs&apos;: [
+         &apos;foo&apos;,
+         &apos;foo/include&apos;,
+      ],
+      &apos;conditions&apos;: [
+         [ &apos;OS==mac&apos;, { &apos;sources&apos;: [ &apos;platform_test_mac.mm&apos; ] } ]
+      ],
+      &apos;direct_dependent_settings&apos;: {
+        &apos;defines&apos;: [
+          &apos;UNIT_TEST&apos;,
+        ],
+        &apos;include_dirs&apos;: [
+          &apos;foo&apos;,
+          &apos;foo/include&apos;,
+        ],
+      },
+    },
+  ],
+}
+</code></pre><h3 id="structural-elements">Structural Elements</h3>
+<h3 id="top-level-dictionary">Top-level Dictionary</h3>
+<p>This is the single dictionary in the <code>.gyp</code> file that defines the
+targets and how they&apos;re to be built.</p>
+<p>The following keywords are meaningful within the top-level dictionary
+definition:</p>
+<p>|:-------------     |:------------------|
+| <code>conditions</code>      | A conditional section that may contain other items that can be present in a top-level dictionary, on a conditional basis.  See the &quot;Conditionals&quot; section below. |
+| <code>includes</code>        | A list of <code>.gypi</code> files to be included in the top-level dictionary. |
+| <code>target_defaults</code> | A dictionary of default settings to be inherited by all targets in the top-level dictionary.  See the &quot;Settings keywords&quot; section below. |
+| <code>targets</code>         | A list of target specifications.  See the &quot;targets&quot; below. |
+| <code>variables</code>       | A dictionary containing variable definitions.  Each key in this dictionary is the name of a variable, and each value must be a string value that the variable is to be set to. |</p>
+<h3 id="targets">targets</h3>
+<p>A list of dictionaries defining targets to be built by the files
+generated from this <code>.gyp</code> file.</p>
+<p>Targets may contain <code>includes</code>, <code>conditions</code>, and <code>variables</code> sections
+as permitted in the root dictionary. The following additional keywords
+have structural meaning for target definitions:</p>
+<p>|:----------                   |:------------------------------------------|
+| <code>actions</code>                    | A list of special custom actions to perform on a specific input file, or files, to produce output files.  See the &quot;Actions&quot; section below. |
+| <code>all_dependent_settings</code>     | A dictionary of settings to be applied to all dependents of the target, transitively.  This includes direct dependents and the entire set of their dependents, and so on.  This section may contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare <code>direct_dependent_settings</code> and <code>link_settings</code>. |
+| <code>configurations</code>             | A list of dictionaries defining build configurations for the target.  See the &quot;Configurations&quot; section below.  |
+| <code>copies</code>                     | A list of copy actions to perform. See the &quot;Copies&quot; section below. |
+| <code>defines</code>                    | A list of preprocesor definitions to be passed on the command line to the C/C++ compiler (via <code>-D</code> or <code>/D</code> options). |
+| <code>dependencies</code>               | A list of targets on which this target depends.  Targets in other <code>.gyp</code> files are specified as <code>../path/to/other.gyp:target_we_want</code>. |
+| <code>direct_dependent_settings</code>  | A dictionary of settings to be applied to other targets that depend on this target.  These settings will only be applied to direct dependents.  This section may contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare with <code>all_dependent_settings</code> and <code>link_settings</code>. |
+| <code>include_dirs</code>               | A list of include directories to be passed on the command line to the C/C++ compiler (via <code>-I</code> or <code>/I</code> options). |
+| <code>libraries</code>                  | A list of list of libraries (and/or frameworks) on which this target depends. |
+| <code>link_settings</code>              | A dictionary of settings to be applied to targets in which this target&apos;s contents are linked.  <code>executable</code> and <code>shared_library</code> targets are linkable, so if they depend on a non-linkable target such as a <code>static_library</code>, they will adopt its <code>link_settings</code>.  This section can contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare <code>all_dependent_settings</code> and <code>direct_dependent_settings</code>. |
+| <code>rules</code>                      | A special custom action to perform on a list of input files, to produce output files.  See the &quot;Rules&quot; section below. |
+| <code>sources</code>                    | A list of source files that are used to build this target or which should otherwise show up in the IDE for this target.  In practice, we expect this list to be a union of all files necessary to build the target on all platforms, as well as other related files that aren&apos;t actually used for building, like README files. |
+| <code>target_conditions</code>          | Like <code>conditions</code>, but evaluation is delayed until the settings have been merged into an actual target.  <code>target_conditions</code> may be used to place conditionals into a <code>target_defaults</code> section but have them still depend on specific target settings. |
+| <code>target_name</code>                | The name of a target being defined. |
+| <code>type</code>                       | The type of target being defined. This field currently supports <code>executable</code>, <code>static_library</code>, <code>shared_library</code>, and <code>none</code>.  The <code>none</code> target type is useful when producing output which is not linked. For example, converting raw translation files into resources or documentation into platform specific help files. |
+| <code>msvs_props</code>                 | A list of Visual Studio property sheets (<code>.vsprops</code> files) to be used to build the target. |
+| <code>xcode_config_file</code>          | An Xcode configuration (<code>.xcconfig</code> file) to be used to build the target. |
+| <code>xcode_framework_dirs</code>       | A list of framework directories be used to build the target. |</p>
+<p>You can affect the way that lists/dictionaries are merged together (for
+example the way a list in target_defaults interacts with the same named
+list in the target itself) with a couple of special characters, which
+are covered in <a href="InputFormatReference#Merge_Basics_(=,_?,_+">Merge
+Basics</a>.md) and <a href="InputFormatReference#List_Filters.md">List
+Filters</a> on the
+InputFormatReference page.</p>
+<h3 id="configurations">configurations</h3>
+<p><code>configurations</code> sections may be found within <code>targets</code> or
+<code>target_defaults</code> sections.  The <code>configurations</code> section is a list of
+dictionaries specifying different build configurations.  Because
+configurations are implemented as lists, it is not currently possible to
+override aspects of configurations that are imported into a target from
+a <code>target_defaults</code> section.</p>
+<p>NOTE: It is extremely important that each target within a project define
+the same set of configurations.  This continues to apply even when a
+project spans across multiple <code>.gyp</code> files.</p>
+<p>A configuration dictionary may contain anything that can be found within
+a target dictionary, except for <code>actions</code>, <code>all_dependent_settings</code>,
+<code>configurations</code>, <code>dependencies</code>, <code>direct_dependent_settings</code>,
+<code>libraries</code>, <code>link_settings</code>, <code>sources</code>, <code>target_name</code>, and <code>type</code>.</p>
+<p>Configuration dictionaries may also contain these elements:</p>
+<p>|:---------------------|:----------------------------------------------------|
+| <code>configuration_name</code> | Required attribute.  The name of the configuration. |</p>
+<h3 id="conditionals">Conditionals</h3>
+<p>Conditionals may appear within any dictionary in a <code>.gyp</code> file.  There
+are two tpes of conditionals, which differ only in the timing of their
+processing.  <code>conditons</code> sections are processed shortly after loading
+<code>.gyp</code> files, and <code>target_conditons</code> sections are processed after all
+dependencies have been computed.</p>
+<p>A conditional section is introduced with a <code>conditions</code> or
+<code>target_conditions</code> dictionary keyword, and is composed of a list.  Each
+list contains two or three elements.  The first two elements, which are
+always required, are the conditional expression to evaluate and a
+dictionary containing settings to merge into the dictionary containing
+the <code>conditions</code> or <code>target_conditions</code> section if the expression
+evaluates to true.  The third, optional, list element is a dictionary to
+merge if the expression evaluates to false.</p>
+<p>The <code>eval()</code> of the expression string takes place in the context of
+global and/or local dictionaries that constructed from the <code>.gyp</code> input
+data, and overrides the <code>__builtin__</code> dictionary, to prevent the
+execution of arbitrary Python code.</p>
+<h3 id="actions">Actions</h3>
+<p>An <code>actions</code> section provides a list of custom build actions to perform
+on inputs, producing outputs.  The <code>actions</code> section is organized as a
+list.  Each item in the list is a dictionary having the following form:</p>
+<p>|:--------------|:-------|:-----------------------------|
+| <code>action_name</code> | string | The name of the action.  Depending on how actions are implemented in the various generators, some may desire or require this property to be set to a unique name; others may ignore this property entirely. |
+| <code>inputs</code>      | list   | A list of pathnames treated as inputs to the custom action. |
+| <code>outputs</code>     | list   | A list of pathnames that the custom action produces. |
+| <code>action</code>      | list   | A command line invocation used to produce <code>outputs</code> from <code>inputs</code>.  For maximum cross-platform compatibility, invocations that require a Python interpreter should be specified with a first element <code>&quot;python&quot;</code>.  This will enable generators for environments with specialized Python installations to be able to perform the action in an appropriate Python environment. |
+| <code>message</code>     | string | A message to be displayed to the user by the build system when the action is run. |</p>
+<p>Build environments will compare <code>inputs</code> and <code>outputs</code>.  If any <code>output</code>
+is missing or is outdated relative to any <code>input</code>, the custom action
+will be invoked.  If all <code>outputs</code> are present and newer than all
+<code>inputs</code>, the <code>outputs</code> are considered up-to-date and the action need
+not be invoked.</p>
+<p>Actions are implemented in Xcode as shell script build phases performed
+prior to the compilation phase.  In the Visual Studio generator, actions
+appear files with a <code>FileConfiguration</code> containing a custom
+<code>VCCustomBuildTool</code> specifying the remainder of the inputs, the outputs,
+and the action.</p>
+<p>Combined with variable expansions, actions can be quite powerful.  Here
+is an example action that leverages variable expansions to minimize
+duplication of pathnames:</p>
+<pre><code>      &apos;sources&apos;: [
+        # libraries.cc is generated by the js2c action below.
+        &apos;&lt;(INTERMEDIATE_DIR)/libraries.cc&apos;,
+      ],
+      &apos;actions&apos;: [
+        {
+          &apos;variables&apos;: {
+            &apos;core_library_files&apos;: [
+              &apos;src/runtime.js&apos;,
+              &apos;src/v8natives.js&apos;,
+              &apos;src/macros.py&apos;,
+            ],
+          },
+          &apos;action_name&apos;: &apos;js2c&apos;,
+          &apos;inputs&apos;: [
+            &apos;tools/js2c.py&apos;,
+            &apos;&lt;@(core_library_files)&apos;,
+          ],
+          &apos;outputs&apos;: [
+            &apos;&lt;(INTERMEDIATE_DIR)/libraries.cc&apos;,
+            &apos;&lt;(INTERMEDIATE_DIR)/libraries-empty.cc&apos;,
+          ],
+          &apos;action&apos;: [&apos;python&apos;, &apos;tools/js2c.py&apos;, &apos;&lt;@(_outputs)&apos;, &apos;CORE&apos;, &apos;&lt;@(core_library_files)&apos;],
+        },
+      ],
+</code></pre><h3 id="rules">Rules</h3>
+<p>A <code>rules</code> section provides custom build action to perform on inputs, producing
+outputs.  The <code>rules</code> section is organized as a list.  Each item in the list is
+a dictionary having the following form:</p>
+<p>|:------------|:-------|:-----------------------------------------|
+| <code>rule_name</code> | string | The name of the rule.  Depending on how Rules are implemented in the various generators, some may desire or require this property to be set to a unique name; others may ignore this property entirely. |
+| <code>extension</code> | string | All source files of the current target with the given extension will be treated successively as inputs to the rule. |
+| <code>inputs</code>    | list   | Additional dependencies of the rule. |
+| <code>outputs</code>   | list   | A list of pathnames that the rule produces. Has access to <code>RULE_INPUT_</code> variables (see below). |
+| <code>action</code>    | list   | A command line invocation used to produce <code>outputs</code> from <code>inputs</code>.  For maximum cross-platform compatibility, invocations that require a Python interpreter should be specified with a first element <code>&quot;python&quot;</code>.  This will enable generators for environments with specialized Python installations to be able to perform the action in an appropriate Python environment. Has access to <code>RULE_INPUT_</code> variables (see below). |
+| <code>message</code>   | string | A message to be displayed to the user by the build system when the action is run. Has access to <code>RULE_INPUT_</code> variables (see below). |</p>
+<p>There are several variables available to <code>outputs</code>, <code>action</code>, and <code>message</code>.</p>
+<p>|:---------------------|:------------------------------------|
+| <code>RULE_INPUT_PATH</code>    | The full path to the current input. |
+| <code>RULE_INPUT_DIRNAME</code> | The directory of the current input. |
+| <code>RULE_INPUT_NAME</code>    | The file name of the current input. |
+| <code>RULE_INPUT_ROOT</code>    | The file name of the current input without extension. |
+| <code>RULE_INPUT_EXT</code>     | The file name extension of the current input. |</p>
+<p>Rules can be thought of as Action generators. For each source selected
+by <code>extension</code> an special action is created. This action starts out with
+the same <code>inputs</code>, <code>outputs</code>, <code>action</code>, and <code>message</code> as the rule. The
+source is added to the action&apos;s <code>inputs</code>. The <code>outputs</code>, <code>action</code>, and
+<code>message</code> are then handled the same but with the additional variables.
+If the <code>_output</code> variable is used in the <code>action</code> or <code>message</code> the
+<code>RULE_INPUT_</code> variables in <code>output</code> will be expanded for the current
+source.</p>
+<h3 id="copies">Copies</h3>
+<p>A <code>copies</code> section provides a simple means of copying files.  The
+<code>copies</code> section is organized as a list.  Each item in the list is a
+dictionary having the following form:</p>
+<p>|:--------------|:-------|:------------------------------|
+| <code>destination</code> | string | The directory into which the <code>files</code> will be copied. |
+| <code>files</code>       | list   | A list of files to be copied. |</p>
+<p>The copies will be created in <code>destination</code> and have the same file name
+as the file they are copied from. Even if the <code>files</code> are from multiple
+directories they will all be copied into the <code>destination</code> directory.
+Each <code>destination</code> file has an implicit build dependency on the file it
+is copied from.</p>
+<h3 id="generated-xcode-pbxproj-files">Generated Xcode .pbxproj Files</h3>
+<p>We derive the following things in a <code>project.pbxproj</code> plist file within
+an <code>.xcodeproj</code> bundle from the above input file formats as follows:</p>
+<ul>
+<li><code>Group hierarchy</code>: This is generated in a fixed format with contents
+derived from the input files. There is no provision for the user to
+specify additional groups or create a custom hierarchy.<ul>
+<li><code>Configuration group</code>: This will be used with the
+<code>xcode_config_file</code> property above, if needed.</li>
+<li><code>Source group</code>: The union of the <code>sources</code> lists of all <code>targets</code>
+after applying appropriate <code>conditions</code>.  The resulting list is
+sorted and put into a group hierarchy that matches the layout of
+the directory tree on disk, with a root of // (the top of the
+hierarchy).</li>
+<li><code>Frameworks group</code>: Taken directly from <code>libraries</code> value for the
+target, after applying appropriate conditions.</li>
+<li><code>Projects group</code>: References to other <code>.xcodeproj</code> bundles that
+are needed by the <code>.xcodeproj</code> in which the group is contained.</li>
+<li><code>Products group</code>: Output from the various targets.</li>
+</ul>
+</li>
+<li><code>Project References</code>:</li>
+<li><code>Project Configurations</code>:<ul>
+<li>Per-<code>.xcodeproj</code> file settings are not supported, all settings are
+applied at the target level.</li>
+</ul>
+</li>
+<li><code>Targets</code>:<ul>
+<li><code>Phases</code>: Copy sources, link with libraries/frameworks, ...</li>
+<li><code>Target Configurations</code>: Specified by input.</li>
+<li><code>Dependencies</code>: (local and remote)</li>
+</ul>
+</li>
+</ul>
+<h3 id="generated-visual-studio-vcproj-files">Generated Visual Studio .vcproj Files</h3>
+<p>We derive the following sections in a <code>.vcproj</code> file from the above
+input file formats as follows:</p>
+<ul>
+<li><code>VisualStudioProject</code>:<ul>
+<li><code>Platforms</code>:</li>
+<li><code>ToolFiles</code>:</li>
+<li><code>Configurations</code>:<ul>
+<li><code>Configuration</code>:</li>
+</ul>
+</li>
+<li><code>References</code>:</li>
+<li><code>Files</code>:<ul>
+<li><code>Filter</code>:</li>
+<li><code>File</code>:<ul>
+<li><code>FileConfiguration</code>:<ul>
+<li><code>Tool</code>:</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>Globals</code>:</li>
+</ul>
+</li>
+</ul>
+<h3 id="generated-visual-studio-sln-files">Generated Visual Studio .sln Files</h3>
+<p>We derive the following sections in a <code>.sln</code> file from the above input
+file formats as follows:</p>
+<ul>
+<li><code>Projects</code>:<ul>
+<li><code>WebsiteProperties</code>:</li>
+<li><code>ProjectDependencies</code>:</li>
+</ul>
+</li>
+<li><code>Global</code>:<ul>
+<li><code>SolutionConfigurationPlatforms</code>:</li>
+<li><code>ProjectConfigurationPlatforms</code>:</li>
+<li><code>SolutionProperties</code>:</li>
+<li><code>NestedProjects</code>:</li>
+</ul>
+</li>
+</ul>
+<h2 id="caveats">Caveats</h2>
+<p>Notes/Question from very first prototype draft of the language.
+Make sure these issues are addressed somewhere before deleting.</p>
+<ul>
+<li>Libraries are easy, application abstraction is harder<ul>
+<li>Applications involves resource compilation</li>
+<li>Applications involve many inputs</li>
+<li>Applications include transitive closure of dependencies</li>
+</ul>
+</li>
+<li>Specific use cases like cc_library<ul>
+<li>Mac compiles more than just .c/.cpp files (specifically, .m and .mm
+files)</li>
+<li>Compiler options vary by:<ul>
+<li>File type</li>
+<li>Target type</li>
+<li>Individual file</li>
+</ul>
+</li>
+<li>Files may have custom settings per file per platform, but we probably
+don&apos;t care or need to support this in gyp.</li>
+</ul>
+</li>
+<li>Will all linked non-Chromium projects always use the same versions of every
+subsystem?</li>
+<li>Variants are difficult.  We&apos;ve identified the following variants (some
+specific to Chromium, some typical of other projects in the same ballpark):<ul>
+<li>Target platform</li>
+<li>V8 vs. JSC</li>
+<li>Debug vs. Release</li>
+<li>Toolchain (VS version, gcc, version)</li>
+<li>Host platform</li>
+<li>L10N</li>
+<li>Vendor</li>
+<li>Purify / Valgrind</li>
+</ul>
+</li>
+<li>Will everyone upgrade VS at once?</li>
+<li>What does a dylib dependency mean?</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="InputFormatReference.html" class="navigation navigation-prev " aria-label="Previous page: Input Format Reference">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="Hacking.html" class="navigation navigation-next " aria-label="Next page: Hacking">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Language specification","level":"1.4","depth":1,"next":{"title":"Hacking","level":"1.5","depth":1,"path":"docs/Hacking.md","ref":"docs/Hacking.md","articles":[]},"previous":{"title":"Input Format Reference","level":"1.3","depth":1,"path":"docs/InputFormatReference.md","ref":"docs/InputFormatReference.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/LanguageSpecification.md","mtime":"2016-06-04T08:50:37.000Z","type":"markdown"},"gitbook":{"version":"3.0.3","time":"2016-06-04T08:37:41.485Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/buttons.js"></script>
+        
+    
+
+    </body>
+</html>
+

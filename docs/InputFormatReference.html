@@ -1,0 +1,1224 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <title>Input Format Reference · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.0.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="LanguageSpecification.html" />
+    
+    
+    <link rel="prev" href="UserDocumentation.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Readme
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="UserDocumentation.html">
+            
+                <a href="UserDocumentation.html">
+            
+                    
+                    User documentation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="InputFormatReference.html">
+            
+                <a href="InputFormatReference.html">
+            
+                    
+                    Input Format Reference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="LanguageSpecification.html">
+            
+                <a href="LanguageSpecification.html">
+            
+                    
+                    Language specification
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="Hacking.html">
+            
+                <a href="Hacking.html">
+            
+                    
+                    Hacking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="Testing.html">
+            
+                <a href="Testing.html">
+            
+                    
+                    Testing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="GypVsCMake.html">
+            
+                <a href="GypVsCMake.html">
+            
+                    
+                    GYP vs. CMake
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Input Format Reference</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="input-format-reference">Input Format Reference</h1>
+<p>[TOC]</p>
+<h2 id="primitive-types">Primitive Types</h2>
+<p>The following primitive types are found within input files:</p>
+<ul>
+<li>String values, which may be represented by enclosing them in
+<code>&apos;single quotes&apos;</code> or <code>&quot;double quotes&quot;</code>.  By convention, single
+quotes are used.</li>
+<li>Integer values, which are represented in decimal without any special
+decoration.  Integers are fairly rare in input files, but have a few
+applications in boolean contexts, where the convention is to
+represent true values with <code>1</code> and false with <code>0</code>.</li>
+<li><p>Lists, which are represented as a sequence of items separated by
+commas (<code>,</code>) within square brackets (<code>[</code> and <code>]</code>).  A list may
+contain any other primitive types, including other lists.
+Generally, each item of a list must be of the same type as all other
+items in the list, but in some cases (such as within <code>conditions</code>
+sections), the list structure is more tightly specified.  A trailing
+comma is permitted.</p>
+<p>This example list contains three string values.</p>
+<pre><code>  [ &apos;Generate&apos;, &apos;Your&apos;, &apos;Projects&apos;, ]
+</code></pre></li>
+<li><p>Dictionaries, which map keys to values.  All keys are strings.
+Values may be of any other primitive type, including other
+dictionaries.  A dictionary is enclosed within curly braces (<code>{</code> and
+<code>}</code>).  Keys precede values, separated by a colon (<code>:</code>).  Successive
+dictionary entries are separated by commas (<code>,</code>).  A trailing comma
+is permitted.  It is an error for keys to be duplicated within a
+single dictionary as written in an input file, although keys may
+replace other keys during <a href="#Merging">merging</a>.</p>
+<p>This example dictionary maps each of three keys to different values.</p>
+<pre><code>  {
+    &apos;inputs&apos;: [&apos;version.c.in&apos;],
+    &apos;outputs&apos;: [&apos;version.c&apos;],
+    &apos;process_outputs_as_sources&apos;: 1,
+  }
+</code></pre></li>
+</ul>
+<h2 id="overall-structure">Overall Structure</h2>
+<p>A GYP input file is organized as structured data.  At the root scope of
+each <code>.gyp</code> or <code>.gypi</code> (include) file is a dictionary.  The keys and
+values of this dictionary, along with any descendants contained within
+the values, provide the data contained within the file.  This data is
+given meaning by interpreting specific key names and their associated
+values in specific ways (see <a href="#Settings_Keys">Settings Keys</a>).</p>
+<h3 id="comments-">Comments (#)</h3>
+<p>Within an input file, a comment is introduced by a pound sign (<code>#</code>) not
+within a string.  Any text following the pound sign, up until the end of
+the line, is treated as a comment.</p>
+<h4 id="example">Example</h4>
+<pre><code>{
+  &apos;school_supplies&apos;: [
+    &apos;Marble composition book&apos;,
+    &apos;Sharp #2 pencil&apos;,
+    &apos;Safety scissors&apos;,  # You still shouldn&apos;t run with these
+  ],
+}
+</code></pre><p>In this example, the # in <code>&apos;Sharp #2 pencil&apos;</code> is not taken as
+introducing a comment because it occurs within a string, but the text
+after <code>&apos;Safety scissors&apos;</code> is treated as a comment having no impact on
+the data within the file.</p>
+<h2 id="merging">Merging</h2>
+<h3 id="merge-basics---">Merge Basics (=, ?, +)</h3>
+<p>Many operations on GYP input files occurs by merging dictionary and list
+items together.  During merge operations, it is important to recognize
+the distinction between source and destination values.  Items from the
+source value are merged into the destination, which leaves the source
+unchanged and the destination modified by the source.  A dictionary may
+only be merged into another dictionary, and a list may only be merged
+into another list.</p>
+<ul>
+<li>When merging a dictionary, for each key in the source:<ul>
+<li>If the key does not exist in the destination dictionary, insert it
+and copy the associated value directly.</li>
+<li>If the key does exist:<ul>
+<li>If the associated value is a dictionary, perform the dictionary
+merging procedure using the source&apos;s and destination&apos;s value
+dictionaries.</li>
+<li>If the associated value is a list, perform the list merging
+procedure using the source&apos;s and destination&apos;s value lists.</li>
+<li>If the associated value is a string or integer, the destination
+value is replaced by the source value.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>When merging a list, merge according to the suffix appended to the
+key name, if the list is a value within a dictionary.<ul>
+<li>If the key ends with an equals sign (<code>=</code>), the policy is for the
+source list to completely replace the destination list if it
+exists.  <em>Mnemonic: <code>=</code> for assignment.</em></li>
+<li>If the key ends with a question mark (<code>?</code>), the policy is for the
+source list to be set as the destination list only if the key is
+not already present in the destination.  <em>Mnemonic: <code>?</code> for
+conditional assignment</em>.</li>
+<li>If the key ends with a plus sign (<code>+</code>), the policy is for the
+source list contents to be prepended to the destination list.
+<em>Mnemonic: <code>+</code> for addition or concatenation.</em></li>
+<li>If the list key is undecorated, the policy is for the source list
+contents to be appended to the destination list.  This is the
+default list merge policy.</li>
+</ul>
+</li>
+</ul>
+<h4 id="example">Example</h4>
+<p>Source dictionary:</p>
+<pre><code>{
+  &apos;include_dirs+&apos;: [
+    &apos;shared_stuff/public&apos;,
+  ],
+  &apos;link_settings&apos;: {
+    &apos;libraries&apos;: [
+      &apos;-lshared_stuff&apos;,
+    ],
+  },
+  &apos;test&apos;: 1,
+}
+</code></pre><p>Destination dictionary:</p>
+<pre><code>{
+  &apos;target_name&apos;: &apos;hello&apos;,
+  &apos;sources&apos;: [
+    &apos;kitty.cc&apos;,
+  ],
+  &apos;include_dirs&apos;: [
+    &apos;headers&apos;,
+  ],
+  &apos;link_settings&apos;: {
+    &apos;libraries&apos;: [
+      &apos;-lm&apos;,
+    ],
+    &apos;library_dirs&apos;: [
+      &apos;/usr/lib&apos;,
+    ],
+  },
+  &apos;test&apos;: 0,
+}
+</code></pre><p>Merged dictionary:</p>
+<pre><code>{
+  &apos;target_name&apos;: &apos;hello&apos;,
+  &apos;sources&apos;: [
+    &apos;kitty.cc&apos;,
+  ],
+  &apos;include_dirs&apos;: [
+    &apos;shared_stuff/public&apos;,  # Merged, list item prepended due to include_dirs+
+    &apos;headers&apos;,
+  ],
+  &apos;link_settings&apos;: {
+    &apos;libraries&apos;: [
+      &apos;-lm&apos;,
+      &apos;-lshared_stuff&apos;,  # Merged, list item appended
+    ],
+    &apos;library_dirs&apos;: [
+      &apos;/usr/lib&apos;,
+    ],
+  },
+  &apos;test&apos;: 1,  # Merged, int value replaced
+}
+</code></pre><h2 id="pathname-relativization">Pathname Relativization</h2>
+<p>In a <code>.gyp</code> or <code>.gypi</code> file, many string values are treated as pathnames
+relative to the file in which they are defined.</p>
+<p>String values associated with the following keys, or contained within
+lists associated with the following keys, are treated as pathnames:</p>
+<ul>
+<li>destination</li>
+<li>files</li>
+<li>include_dirs</li>
+<li>inputs</li>
+<li>libraries</li>
+<li>outputs</li>
+<li>sources</li>
+<li>mac_bundle_resources</li>
+<li>mac_framework_dirs</li>
+<li>msvs_cygwin_dirs</li>
+<li>msvs_props</li>
+</ul>
+<p>Additionally, string values associated with keys ending in the following
+suffixes, or contained within lists associated with keys ending in the
+following suffixes, are treated as pathnames:</p>
+<ul>
+<li><code>_dir</code></li>
+<li><code>_dirs</code></li>
+<li><code>_file</code></li>
+<li><code>_files</code></li>
+<li><code>_path</code></li>
+<li><code>_paths</code></li>
+</ul>
+<p>However, any string value beginning with any of these characters is
+excluded from pathname relativization:</p>
+<ul>
+<li><code>/</code> for identifying absolute paths.</li>
+<li><code>$</code> for introducing build system variable expansions.</li>
+<li><code>-</code> to support specifying such items as <code>-llib</code>, meaning &#x201C;library
+<code>lib</code> in the library search path.&#x201D;</li>
+<li><code>&lt;</code>, <code>&gt;</code>, and <code>!</code> for GYP expansions.</li>
+</ul>
+<p>When merging such relative pathnames, they are adjusted so that they can
+remain valid relative pathnames, despite being relative to a new home.</p>
+<h4 id="example">Example</h4>
+<p>Source dictionary from <code>../build/common.gypi</code>:</p>
+<pre><code>{
+  &apos;include_dirs&apos;: [&apos;include&apos;],  # Treated as relative to ../build
+  &apos;libraries&apos;: [&apos;-lz&apos;],  # Not treated as a pathname, begins with a dash
+  &apos;defines&apos;: [&apos;NDEBUG&apos;],  # defines does not contain pathnames
+}
+</code></pre><p>Target dictionary, from <code>base.gyp</code>:</p>
+<pre><code>{
+  &apos;sources&apos;: [&apos;string_util.cc&apos;],
+}
+</code></pre><p>Merged dictionary:</p>
+<pre><code>{
+  &apos;sources&apos;: [&apos;string_util.cc&apos;],
+  &apos;include_dirs&apos;: [&apos;../build/include&apos;],
+  &apos;libraries&apos;: [&apos;-lz&apos;],
+  &apos;defines&apos;: [&apos;NDEBUG&apos;],
+}
+</code></pre><p>Because of pathname relativization, after the merge is complete, all of
+the pathnames in the merged dictionary are valid relative to the
+directory containing <code>base.gyp</code>.</p>
+<h2 id="list-singletons">List Singletons</h2>
+<p>Some list items are treated as singletons, and the list merge process
+will enforce special rules when merging them.  At present, any string
+item in a list that does not begin with a dash (<code>-</code>) is treated as a
+singleton, although <strong>this is subject to change.</strong>  When appending or
+prepending a singleton to a list, if the item is already in the list,
+only the earlier instance is retained in the merged list.</p>
+<h4 id="example">Example</h4>
+<p>Source dictionary:</p>
+<pre><code>{
+  &apos;defines&apos;: [
+    &apos;EXPERIMENT=1&apos;,
+    &apos;NDEBUG&apos;,
+  ],
+}
+</code></pre><p>Destination dictionary:</p>
+<pre><code>{
+  &apos;defines&apos;: [
+    &apos;NDEBUG&apos;,
+    &apos;USE_THREADS&apos;,
+  ],
+}
+</code></pre><p>Merged dictionary:</p>
+<pre><code>{
+  &apos;defines&apos;: [
+    &apos;NDEBUG&apos;,
+    &apos;USE_THREADS&apos;,
+    &apos;EXPERIMENT=1&apos;,  # Note that NDEBUG is not appended after this.
+  ],
+}
+</code></pre><h2 id="including-other-files">Including Other Files</h2>
+<p>If the <code>-I</code> (<code>--include</code>) argument was used to invoke GYP, any files
+specified will be implicitly merged into the root dictionary of all
+<code>.gyp</code> files.</p>
+<p>An <a href="#includes">includes</a> section may be placed anywhere within a
+<code>.gyp</code> or <code>.gypi</code> (include) file.  <code>includes</code> sections contain lists of
+other files to include.  They are processed sequentially and merged into
+the enclosing dictionary at the point that the <code>includes</code> section was
+found.  <code>includes</code> sections at the root of a <code>.gyp</code> file dictionary are
+merged after any <code>-I</code> includes from the command line.</p>
+<p><a href="#includes">includes</a> sections are processed immediately after a file is
+loaded, even before <a href="#Variables_and_Conditionals">variable and conditional
+processing</a>, so it is not possible to
+include a file based on a <a href="#Variable_Expansions">variable reference</a>.
+While it would be useful to be able to include files based on variable
+expansions, it is most likely more useful to allow included files access
+to variables set by the files that included them.</p>
+<p>An <a href="#includes">includes</a> section may, however, be placed within a
+<a href="#Conditionals">conditional</a> section.  The included file itself will
+be loaded unconditionally, but its dictionary will be discarded if the
+associated condition is not true.</p>
+<h2 id="variables-and-conditionals">Variables and Conditionals</h2>
+<h3 id="variables">Variables</h3>
+<p>There are three main types of variables within GYP.</p>
+<ul>
+<li>Predefined variables.  By convention, these are named with
+<code>CAPITAL_LETTERS</code>.  Predefined variables are set automatically by
+GYP.  They may be overridden, but it is not advisable to do so.  See
+<a href="#Predefined_Variables">Predefined Variables</a> for a list of
+variables that GYP provides.</li>
+<li>User-defined variables.  Within any dictionary, a key named
+<code>variables</code> can be provided, containing a mapping between variable
+names (keys) and their contents (values), which may be strings,
+integers, or lists of strings.  By convention, user-defined
+variables are named with <code>lowercase_letters</code>.</li>
+<li>Automatic variables.  Within any dictionary, any key with a string
+value has a corresponding automatic variable whose name is the same
+as the key name with an underscore (<code>_</code>) prefixed.  For example, if
+your dictionary contains <code>type: &apos;static_library&apos;</code>, an automatic
+variable named <code>_type</code> will be provided, and its value will be a
+string, <code>&apos;static_library&apos;</code>.</li>
+</ul>
+<p>Variables are inherited from enclosing scopes.</p>
+<h3 id="providing-default-values-for-variables-">Providing Default Values for Variables (%)</h3>
+<p>Within a <code>variables</code> section, keys named with percent sign (<code>%</code>)
+suffixes mean that the variable should be set only if it is undefined at
+the time it is processed.  This can be used to provide defaults for
+variables that would otherwise be undefined, so that they may reliably
+be used in <a href="#Variables_and_Conditionals">variable expansion or conditional
+processing</a>.</p>
+<h3 id="predefined-variables">Predefined Variables</h3>
+<p>Each GYP generator module provides defaults for the following variables:</p>
+<ul>
+<li><p><code>OS</code>: The name of the operating system that the generator produces
+output for.  Common values for values for <code>OS</code> are:</p>
+<ul>
+<li><code>&apos;linux&apos;</code></li>
+<li><code>&apos;mac&apos;</code></li>
+<li><code>&apos;win&apos;</code></li>
+</ul>
+<p>But other values may be encountered and this list should not be
+considered exhaustive.  The <code>gypd</code> (debug) generator module does not
+provide a predefined value for <code>OS</code>.  When invoking GYP with the
+<code>gypd</code> module, if a value for <code>OS</code> is needed, it must be provided on
+the command line, such as <code>gyp -f gypd -DOS=mac</code>.</p>
+<p>GYP generators also provide defaults for these variables.  They may
+be expressed in terms of variables used by the build system that
+they generate for, often in <code>$(VARIABLE)</code> format.  For example, the
+GYP <code>PRODUCT_DIR</code> variable maps to the Xcode <code>BUILT_PRODUCTS_DIR</code>
+variable, so <code>PRODUCT_DIR</code> is defined by the Xcode generator as
+<code>$(BUILT_PRODUCTS_DIR)</code>.</p>
+</li>
+<li><code>EXECUTABLE_PREFIX</code>: A prefix, if any, applied to executable names.
+Usually this will be an empty string.</li>
+<li><code>EXECUTABLE_SUFFIX</code>: A suffix, if any, applied to executable names.
+On Windows, this will be <code>.exe</code>, elsewhere, it will usually be an
+empty string.</li>
+<li><code>INTERMEDIATE_DIR</code>: A directory that can be used to place
+intermediate build results in.  <code>INTERMEDIATE_DIR</code> is only
+guaranteed to be accessible within a single target (See targets).
+This variable is most useful within the context of rules and actions
+(See rules, See actions).  Compare with <code>SHARED_INTERMEDIATE_DIR</code>.</li>
+<li><code>PRODUCT_DIR</code>: The directory in which the primary output of each
+target, such as executables and libraries, is placed.</li>
+<li><code>RULE_INPUT_ROOT</code>: The base name for the input file (e.g. &quot;<code>foo</code>&quot;).
+See Rules.</li>
+<li><code>RULE_INPUT_EXT</code>: The file extension for the input file (e.g.
+&quot;<code>.cc</code>&quot;).  See Rules.</li>
+<li><code>RULE_INPUT_NAME</code>: Full name of the input file (e.g. &quot;<code>foo.cc</code>&quot;).
+See Rules.</li>
+<li><code>RULE_INPUT_PATH</code>: Full path to the input file (e.g.
+&quot;<code>/bar/foo.cc</code>&quot;).  See Rules.</li>
+<li><code>SHARED_INTERMEDIATE_DIR</code>: A directory that can be used to place
+intermediate build results in, and have them be accessible to other
+targets.  Unlike <code>INTERMEDIATE_DIR</code>, each target in a project,
+possibly spanning multiple <code>.gyp</code> files, shares the same
+<code>SHARED_INTERMEDIATE_DIR</code>.</li>
+</ul>
+<p>The following additional predefined variables may be available under
+certain circumstances:</p>
+<ul>
+<li><code>DEPTH</code>.  When GYP is invoked with a <code>--depth</code> argument, when
+processing any <code>.gyp</code> file, <code>DEPTH</code> will be a relative path from the
+<code>.gyp</code> file to the directory specified by the <code>--depth</code> argument.</li>
+</ul>
+<h3 id="user-defined-variables">User-Defined Variables</h3>
+<p>A user-defined variable may be defined in terms of other variables, but
+not other variables that have definitions provided in the same scope.</p>
+<h3 id="variable-expansions----">Variable Expansions (&lt;, &gt;, &lt;@, &gt;@)</h3>
+<p>GYP provides two forms of variable expansions, &#x201C;early&#x201D; or &#x201C;pre&#x201D;
+expansions, and &#x201C;late,&#x201D; &#x201C;post,&#x201D; or &#x201C;target&#x201D; expansions.  They have
+similar syntax, differing only in the character used to introduce them.</p>
+<ul>
+<li>Early expansions are introduced by a less-than (<code>&lt;</code>) character.
+<em>Mnemonic: the arrow points to the left, earlier on a timeline.</em></li>
+<li>Late expansions are introduced by a less-than (<code>&gt;</code>) character.
+<em>Mnemonic: the arrow points to the right, later on a timeline.</em></li>
+</ul>
+<p>The difference the two phases of expansion is described in <a href="#Early_and_Late_Phases">Early and
+Late Phases</a>.</p>
+<p>These characters were chosen based upon the requirement that they not
+conflict with the variable format used natively by build systems.  While
+the dollar sign (<code>$</code>) is the most natural fit for variable expansions,
+its use was ruled out because most build systems already use that
+character for their own variable expansions.  Using different characters
+means that no escaping mechanism was needed to differentiate between GYP
+variables and build system variables, and writing build system variables
+into GYP files is not cumbersome.</p>
+<p>Variables may contain lists or strings, and variable expansions may
+occur in list or string context.  There are variant forms of variable
+expansions that may be used to determine how each type of variable is to
+be expanded in each context.</p>
+<ul>
+<li>When a variable is referenced by <code>&lt;(VAR)</code> or <code>&gt;(VAR)</code>:<ul>
+<li>If <code>VAR</code> is a string, the variable reference within the string is
+replaced by variable&apos;s string value.</li>
+<li>If <code>VAR</code> is a list, the variable reference within the string is
+replaced by a string containing the concatenation of all of the
+variable&#x2019;s list items.  Generally, the items are joined with
+spaces between each, but the specific behavior is
+generator-specific.  The precise encoding used by any generator
+should be one that would allow each list item to be treated as a
+separate argument when used as program arguments on the system
+that the generator produces output for.</li>
+</ul>
+</li>
+<li>When a variable is referenced by <code>&lt;@(VAR)</code> or <code>&gt;@(VAR)</code>:<ul>
+<li>The expansion must occur in list context.</li>
+<li>The list item must be <code>&apos;&lt;@(VAR)&apos;</code> or <code>&apos;&gt;@(VAR)&apos;</code> exactly.</li>
+<li>If <code>VAR</code> is a list, each of its elements are inserted into the
+list in which expansion is taking place, replacing the list item
+containing the variable reference.</li>
+<li>If <code>VAR</code> is a string, the string is converted to a list which is
+inserted into the list in which expansion is taking place as
+above.  The conversion into a list is generator-specific, but
+generally, spaces in the string are taken as separators between
+list items.  The specific method of converting the string to a
+list should be the inverse of the encoding method used to expand
+list variables in string context, above.</li>
+</ul>
+</li>
+</ul>
+<p>GYP treats references to undefined variables as errors.</p>
+<h3 id="command-expansions--">Command Expansions (&lt;!, &lt;!@)</h3>
+<p>Command expansions function similarly to variable expansions, but
+instead of resolving variable references, they cause GYP to execute a
+command at generation time and use the command&#x2019;s output as the
+replacement.  Command expansions are introduced by a less than and
+exclamation mark (<code>&lt;!</code>).</p>
+<p>In a command expansion, the entire string contained within the
+parentheses is passed to the system&#x2019;s shell.  The command&#x2019;s output is
+assigned to a string value that may subsequently be expanded in list
+context in the same way as variable expansions if an <code>@</code> character is
+used.</p>
+<p>In addition, command expansions (unlike other variable expansions) may
+include nested variable expansions.  So something like this is allowed:</p>
+<pre><code>&apos;variables&apos; : [
+  &apos;foo&apos;: &apos;&lt;!(echo Build Date &lt;!(date))&apos;,
+],
+</code></pre><p>expands to:</p>
+<pre><code>&apos;variables&apos; : [
+  &apos;foo&apos;: &apos;Build Date 02:10:38 PM Fri Jul 24, 2009 -0700 PDT&apos;,
+],
+</code></pre><p>You may also put commands into arrays in order to quote arguments (but
+note that you need to use a different string quoting character):</p>
+<pre><code>&apos;variables&apos; : [
+  &apos;files&apos;: &apos;&lt;!([&quot;ls&quot;, &quot;-1&quot;, &quot;Filename With Spaces&quot;])&apos;,
+],
+</code></pre><p>GYP treats command failures (as indicated by a nonzero exit status)
+during command expansion as errors.</p>
+<h4 id="example">Example</h4>
+<pre><code>{
+  &apos;sources&apos;: [
+    &apos;!(echo filename with space.cc)&apos;,
+  ],
+  &apos;libraries&apos;: [
+    &apos;!@(pkg-config --libs-only-l apr-1)&apos;,
+  ],
+}
+</code></pre><p>might expand to:</p>
+<pre><code>{
+  &apos;sources&apos;: [
+    &apos;filename with space.cc&apos;,  # no @, expands into a single string
+  ],
+  &apos;libraries&apos;: [  # @ was used, so there&apos;s a separate list item for each lib
+    &apos;-lapr-1&apos;,
+    &apos;-lpthread&apos;,
+  ],
+}
+</code></pre><h2 id="conditionals">Conditionals</h2>
+<p>Conditionals use the same set of variables used for variable expansion.
+As with variable expansion, there are two phases of conditional
+evaluation:</p>
+<ul>
+<li>&#x201C;Early&#x201D; or &#x201C;pre&#x201D; conditional evaluation, introduced in
+<a href="#conditions">conditions</a> sections.</li>
+<li>&#x201C;Late,&#x201D; &#x201C;post,&#x201D; or &#x201C;target&#x201D; conditional evaluation, introduced in
+<a href="#target_conditions">target_conditions</a> sections.</li>
+</ul>
+<p>The syntax for each type is identical, they differ only in the key name
+used to identify them and the timing of their evaluation.  A more
+complete description of syntax and use is provided in
+<a href="#conditions">conditions</a>.</p>
+<p>The difference the two phases of evaluation is described in <a href="#Early_and_Late_Phases">Early and
+Late Phases</a>.</p>
+<h2 id="timing-of-variable-expansion-and-conditional-evaluation">Timing of Variable Expansion and Conditional Evaluation</h2>
+<h3 id="early-and-late-phases">Early and Late Phases</h3>
+<p>GYP performs two phases of variable expansion and conditional evaluation:</p>
+<ul>
+<li>The &#x201C;early&#x201D; or &#x201C;pre&#x201D; phase operates on <a href="#conditions">conditions</a>
+sections and the <code>&lt;</code> form of <a href="#Variable_Expansions">variable
+expansions</a>.</li>
+<li>The &#x201C;late,&#x201D; &#x201C;post,&#x201D; or &#x201C;target&#x201D; phase operates on
+<a href="#target_conditions">target_conditions</a> sections, the <code>&gt;</code> form
+of <a href="#Variable_Expansions">variable expansions</a>,
+and on the <code>!</code> form of <a href="#Command_Expansions_(!,_!@">command
+expansions</a>).</li>
+</ul>
+<p>These two phases are provided because there are some circumstances in
+which each is desirable.</p>
+<p>The &#x201C;early&#x201D; phase is appropriate for most expansions and evaluations.
+&#x201C;Early&#x201D; expansions and evaluations may be performed anywhere within any
+<code>.gyp</code> or <code>.gypi</code> file.</p>
+<p>The &#x201C;late&#x201D; phase is appropriate when expansion or evaluation must be
+deferred until a specific section has been merged into target context.
+&#x201C;Late&#x201D; expansions and evaluations only occur within <code>targets</code> sections
+and their descendants.  The typical use case for a late-phase expansion
+is to provide, in some globally-included <code>.gypi</code> file, distinct
+behaviors depending on the specifics of a target.</p>
+<h4 id="example">Example</h4>
+<p>Given this input:</p>
+<pre><code>{
+  &apos;target_defaults&apos;: {
+    &apos;target_conditions&apos;: [
+      [&apos;_type==&quot;shared_library&quot;&apos;, {&apos;cflags&apos;: [&apos;-fPIC&apos;]}],
+    ],
+  },
+  &apos;targets&apos;: [
+    {
+      &apos;target_name&apos;: &apos;sharing_is_caring&apos;,
+      &apos;type&apos;: &apos;shared_library&apos;,
+    },
+    {
+      &apos;target_name&apos;: &apos;static_in_the_attic&apos;,
+      &apos;type&apos;: &apos;static_library&apos;,
+    },
+  ]
+}
+</code></pre><p>The conditional needs to be evaluated only in target context; it is
+nonsense outside of target context because no <code>_type</code> variable is
+defined.  <a href="#target_conditions">target_conditions</a> allows evaluation
+to be deferred until after the <a href="#targets">targets</a> sections are
+merged into their copies of <a href="#target_defaults">target_defaults</a>.
+The resulting targets, after &#x201C;late&#x201D; phase processing:</p>
+<pre><code>{
+  &apos;targets&apos;: [
+    {
+      &apos;target_name&apos;: &apos;sharing_is_caring&apos;,
+      &apos;type&apos;: &apos;shared_library&apos;,
+      &apos;cflags&apos;: [&apos;-fPIC&apos;],
+    },
+    {
+      &apos;target_name&apos;: &apos;static_in_the_attic&apos;,
+      &apos;type&apos;: &apos;static_library&apos;,
+    },
+  ]
+}
+</code></pre><h3 id="expansion-and-evaluation-performed-simultaneously">Expansion and Evaluation Performed Simultaneously</h3>
+<p>During any expansion and evaluation phase, both expansion and evaluation
+are performed simultaneously.  The process for handling variable
+expansions and conditional evaluation within a dictionary is:</p>
+<ul>
+<li>Load <a href="#Variables">automatic variables</a> (those with leading
+underscores).</li>
+<li>If a <a href="#variables">variables</a> section is present, recurse into its
+dictionary.  This allows <a href="#Conditionals">conditionals</a> to be
+present within the <code>variables</code> dictionary.</li>
+<li>Load <a href="#User-Defined">Variables user-defined variables</a> from the
+<a href="#variables">variables</a> section.</li>
+<li>For each string value in the dictionary, perform <a href="#Variable_Expansions">variable
+expansion</a> and, if operating
+during the &#x201C;late&#x201D; phase, <a href="#Command_Expansions">command
+expansions</a>.</li>
+<li>Reload <a href="#Variables">automatic variables</a> and <a href="#User-Defined">Variables
+user-defined variables</a> because the variable
+expansion step may have resulted in changes to the automatic
+variables.</li>
+<li>If a <a href="#conditions">conditions</a> or
+<a href="#target_conditions">target_conditions</a> section (depending on
+phase) is present, recurse into its dictionary.  This is done after
+variable expansion so that conditionals may take advantage of
+expanded automatic variables.</li>
+<li>Evaluate <a href="#Conditionals">conditionals</a>.</li>
+<li>Reload <a href="#Variables">automatic variables</a> and <a href="#User-Defined">Variables
+user-defined variables</a> because the conditional
+evaluation step may have resulted in changes to the automatic
+variables.</li>
+<li>Recurse into child dictionaries or lists that have not yet been
+processed.</li>
+</ul>
+<p>One quirk of this ordering is that you cannot expect a
+<a href="#variables">variables</a> section within a dictionary&#x2019;s
+<a href="#Conditionals">conditional</a> to be effective in the dictionary
+itself, but the added variables will be effective in any child
+dictionaries or lists.  It is thought to be far more worthwhile to
+provide resolved <a href="#Variables">automatic variables</a> to
+<a href="#Conditionals">conditional</a> sections, though.  As a workaround, to
+conditionalize variable values, place a <a href="#conditions">conditions</a> or
+<a href="#target_conditions">target_conditions</a> section within the
+<a href="#variables">variables</a> section.</p>
+<h2 id="dependencies-and-dependents">Dependencies and Dependents</h2>
+<p>In GYP, &#x201C;dependents&#x201D; are targets that rely on other targets, called
+&#x201C;dependencies.&#x201D;  Dependents declare their reliance with a special
+section within their target dictionary,
+<a href="#dependencies">dependencies</a>.</p>
+<h3 id="dependent-settings">Dependent Settings</h3>
+<p>It is useful for targets to &#x201C;advertise&#x201D; settings to their dependents.
+For example, a target might require that all of its dependents add
+certain directories to their include paths, link against special
+libraries, or define certain preprocessor macros.  GYP allows these
+cases to be handled gracefully with &#x201C;dependent settings&#x201D; sections.
+There are three types of such sections:</p>
+<ul>
+<li><a href="#direct_dependent_settings">direct_dependent_settings</a>, which
+advertises settings to a target&apos;s direct dependents only.</li>
+<li><a href="#all_dependnet_settings">all_dependent_settings</a>, which
+advertises settings to all of a target&apos;s dependents, both direct and
+indirect.</li>
+<li><a href="#link_settings">link_settings</a>, which contains settings that
+should be applied when a target&#x2019;s object files are used as linker
+input.</li>
+</ul>
+<p>Furthermore, in some cases, a target needs to pass its dependencies&#x2019;
+settings on to its own dependents.  This might happen when a target&#x2019;s
+own public header files include header files provided by its dependency.
+<a href="#export_dependent_settings">export_dependent_settings</a> allows a
+target to declare dependencies for which
+<a href="#direct_dependent_settings">direct_dependent_settings</a> should be
+passed through to its own dependents.</p>
+<p>Dependent settings processing merges a copy of the relevant dependent
+settings dictionary from a dependency into its relevant dependent
+targets.</p>
+<p>In most instances,
+<a href="#direct_dependent_settings">direct_dependent_settings</a> will be
+used.  There are very few cases where
+<a href="#all_dependent_settings">all_dependent_settings</a> is actually
+correct; in most of the cases where it is tempting to use, it would be
+preferable to declare
+<a href="#export_dependent_settings">export_dependent_settings</a>.  Most
+<a href="#libraries">libraries</a> and <a href="#library_dirs">library_dirs</a>
+sections should be placed within <a href="#link_settings">link_settings</a>
+sections.</p>
+<h4 id="example">Example</h4>
+<p>Given:</p>
+<pre><code>{
+  &apos;targets&apos;: [
+    {
+      &apos;target_name&apos;: &apos;cruncher&apos;,
+      &apos;type&apos;: &apos;static_library&apos;,
+      &apos;sources&apos;: [&apos;cruncher.cc&apos;],
+      &apos;direct_dependent_settings&apos;: {
+        &apos;include_dirs&apos;: [&apos;.&apos;],  # dependents need to find cruncher.h.
+      },
+      &apos;link_settings&apos;: {
+        &apos;libraries&apos;: [&apos;-lm&apos;],  # cruncher.cc does math.
+      },
+    },
+    {
+      &apos;target_name&apos;: &apos;cruncher_test&apos;,
+      &apos;type&apos;: &apos;executable&apos;,
+      &apos;dependencies&apos;: [&apos;cruncher&apos;],
+      &apos;sources&apos;: [&apos;cruncher_test.cc&apos;],
+    },
+  ],
+}
+</code></pre><p>After dependent settings processing, the dictionary for <code>cruncher_test</code>
+will be:</p>
+<pre><code>{
+  &apos;target_name&apos;: &apos;cruncher_test&apos;,
+  &apos;type&apos;: &apos;executable&apos;,
+  &apos;dependencies&apos;: [&apos;cruncher&apos;],  # implies linking against cruncher
+  &apos;sources&apos;: [&apos;cruncher_test.cc&apos;],
+  &apos;include_dirs&apos;: [&apos;.&apos;]
+  &apos;libraries&apos;: [&apos;-lm&apos;],
+},
+</code></pre><p>If <code>cruncher</code> was declared as a <code>shared_library</code> instead of a
+<code>static_library</code>, the <code>cruncher_test</code> target would not contain <code>-lm</code>,
+but instead, <code>cruncher</code> itself would link against <code>-lm</code>.</p>
+<h2 id="linking-dependencies">Linking Dependencies</h2>
+<p>The precise meaning of a dependency relationship varies with the
+<a href="#type">types</a> of the <a href="#targets">targets</a> at either end of the
+relationship.  In GYP, a dependency relationship can indicate two things
+about how targets relate to each other:</p>
+<ul>
+<li>Whether the dependent target needs to link against the dependency.</li>
+<li>Whether the dependency target needs to be built prior to the
+dependent.  If the former case is true, this case must be true as
+well.</li>
+</ul>
+<p>The analysis of the first item is complicated by the differences between
+static and shared libraries.</p>
+<ul>
+<li>Static libraries are simply collections of object files (<code>.o</code> or
+<code>.obj</code>) that are used as inputs to a linker (<code>ld</code> or <code>link.exe</code>).
+Static libraries don&apos;t link against other libraries, they&#x2019;re
+collected together and used when eventually linking a shared library
+or executable.</li>
+<li>Shared libraries are linker output and must undergo symbol
+resolution.  They must link against other libraries (static or
+shared) in order to facilitate symbol resolution.  They may be used
+as libraries in subsequent link steps.</li>
+<li>Executables are also linker output, and also undergo symbol
+resolution.  Like shared libraries, they must link against static
+and shared libraries to facilitate symbol resolution.  They may not
+be reused as linker inputs in subsequent link steps.</li>
+</ul>
+<p>Accordingly, GYP performs an operation referred to as &#x201C;static library
+dependency adjustment,&#x201D; in which it makes each linker output target
+(shared libraries and executables) link against the static libraries it
+depends on, either directly or indirectly.  Because the linkable targets
+link against these static libraries, they are also made direct
+dependents of the static libraries.</p>
+<p>As part of this process, GYP is also able to remove the direct
+dependency relationships between two static library targets, as a
+dependent static library does not actually need to link against a
+dependency static library.  This removal facilitates speedier builds
+under some build systems, as they are now free to build the two targets
+in parallel.  The removal of this dependency is incorrect in some cases,
+such as when the dependency target contains <a href="#rules">rules</a> or
+<a href="#actions">actions</a> that generate header files required by the
+dependent target.  In such cases, the dependency target, the one
+providing the side-effect files, must declare itself as a
+<a href="#hard_dependency">hard_dependency</a>.  This setting instructs GYP to
+not remove the dependency link between two static library targets in its
+generated output.</p>
+<h2 id="loading-files-to-resolve-dependencies">Loading Files to Resolve Dependencies</h2>
+<p>When GYP runs, it loads all <code>.gyp</code> files needed to resolve dependencies
+found in <a href="#dependencies">dependencies</a> sections.  These files are not
+merged into the files that reference them, but they may contain special
+sections that are merged into dependent target dictionaries.</p>
+<h2 id="build-configurations">Build Configurations</h2>
+<p>Explain this.</p>
+<h2 id="list-filters">List Filters</h2>
+<p>GYP allows list items to be filtered by &#x201C;exclusions&#x201D; and &#x201C;patterns.&#x201D;
+Any list containing string values in a dictionary may have this
+filtering applied.  For the purposes of this section, a list modified by
+exclusions or patterns is referred to as a &#x201C;base list&#x201D;, in contrast to
+the &#x201C;exclusion list&#x201D; and &#x201C;pattern list&#x201D; that operates on it.</p>
+<ul>
+<li>For a base list identified by key name <code>key</code>, the <code>key!</code> list
+provides exclusions.</li>
+<li>For a base list identified by key name <code>key</code>, the <code>key/</code> list
+provides regular expression pattern-based filtering.</li>
+</ul>
+<p>Both <code>key!</code> and <code>key/</code> may be present.  The <code>key!</code> exclusion list will
+be processed first, followed by the <code>key/</code> pattern list.</p>
+<p>Exclusion lists are most powerful when used in conjunction with
+<a href="#Conditionals">conditionals</a>.</p>
+<h2 id="exclusion-lists-">Exclusion Lists (!)</h2>
+<p>An exclusion list provides a way to remove items from the related list
+based on exact matching.  Any item found in an exclusion list will be
+removed from the corresponding base list.</p>
+<h4 id="example">Example</h4>
+<p>This example excludes files from the <code>sources</code> based on the setting of
+the <code>OS</code> variable.</p>
+<pre><code>{
+  &apos;sources:&apos; [
+    &apos;mac_util.mm&apos;,
+    &apos;win_util.cc&apos;,
+  ],
+  &apos;conditions&apos;: [
+    [&apos;OS==&quot;mac&quot;&apos;, {&apos;sources!&apos;: [&apos;win_util.cc&apos;]}],
+    [&apos;OS==&quot;win&quot;&apos;, {&apos;sources!&apos;: [&apos;mac_util.cc&apos;]}],
+  ],
+}
+</code></pre><h2 id="pattern-lists-">Pattern Lists (/)</h2>
+<p>Pattern lists are similar to, but more powerful than, <a href="#Exclusion_Lists_(!">exclusion
+lists</a>).  Each item in a pattern list is itself
+a two-element list.  The first item is a string, either <code>&apos;include&apos;</code> or
+<code>&apos;exclude&apos;</code>, specifying the action to take.  The second item is a string
+specifying a regular expression.  Any item in the base list matching the
+regular expression pattern will either be included or excluded, based on
+the action specified.</p>
+<p>Items in a pattern list are processed in sequence, and an excluded item
+that is later included will not be removed from the list (unless it is
+subsequently excluded again.)</p>
+<p>Pattern lists are processed after <a href="#Exclusion_Lists_(!">exclusion
+lists</a>), so it is possible for a pattern list to
+re-include items previously excluded by an exclusion list.</p>
+<p>Nothing is actually removed from a base list until all items in an
+<a href="#Exclusion_Lists_(!">exclusion list</a>) and pattern list have been
+evaluated.  This allows items to retain their correct position relative
+to one another even after being excluded and subsequently included.</p>
+<h4 id="example">Example</h4>
+<p>In this example, a uniform naming scheme is adopted for
+platform-specific files.</p>
+<pre><code>{
+  &apos;sources&apos;: [
+    &apos;io_posix.cc&apos;,
+    &apos;io_win.cc&apos;,
+    &apos;launcher_mac.cc&apos;,
+    &apos;main.cc&apos;,
+    &apos;platform_util_linux.cc&apos;,
+    &apos;platform_util_mac.mm&apos;,
+  ],
+  &apos;sources/&apos;: [
+    [&apos;exclude&apos;, &apos;_win\\.cc$&apos;],
+  ],
+  &apos;conditions&apos;: [
+    [&apos;OS!=&quot;linux&quot;&apos;, {&apos;sources/&apos;: [[&apos;exclude&apos;, &apos;_linux\\.cc$&apos;]]}],
+    [&apos;OS!=&quot;mac&quot;&apos;, {&apos;sources/&apos;: [[&apos;exclude&apos;, &apos;_mac\\.cc|mm?$&apos;]]}],
+    [&apos;OS==&quot;win&quot;&apos;, {&apos;sources/&apos;: [
+      [&apos;include&apos;, &apos;_win\\.cc$&apos;],
+      [&apos;exclude&apos;, &apos;_posix\\.cc$&apos;],
+    ]}],
+  ],
+}
+</code></pre><p>After the pattern list is applied, <code>sources</code> will have the following
+values, depending on the setting of <code>OS</code>:</p>
+<ul>
+<li>When <code>OS</code> is <code>linux</code>: <code>[&apos;io_posix.cc&apos;, &apos;main.cc&apos;,
+&apos;platform_util_linux.cc&apos;]</code></li>
+<li>When <code>OS</code> is <code>mac</code>: <code>[&apos;io_posix.cc&apos;, &apos;launcher_mac.cc&apos;, &apos;main.cc&apos;,
+&apos;platform_util_mac.mm&apos;]</code></li>
+<li>When <code>OS</code> is <code>win</code>: <code>[&apos;io_win.cc&apos;, &apos;main.cc&apos;,
+&apos;platform_util_win.cc&apos;]</code></li>
+</ul>
+<p>Note that when <code>OS</code> is <code>win</code>, the <code>include</code> for <code>_win.cc</code> files is
+processed after the <code>exclude</code> matching the same pattern, because the
+<code>sources/</code> list participates in <a href="#Merging">merging</a> during
+<a href="#Conditonals">conditional evaluation</a> just like any other list
+would.  This guarantees that the <code>_win.cc</code> files, previously
+unconditionally excluded, will be re-included when <code>OS</code> is <code>win</code>.</p>
+<h2 id="locating-excluded-items">Locating Excluded Items</h2>
+<p>In some cases, a GYP generator needs to access to items that were
+excluded by an <a href="#Exclusion_Lists_(!">exclusion list</a>) or <a href="#Pattern_Lists_(/">pattern
+list</a>).  When GYP excludes items during processing
+of either of these list types, it places the results in an <code>_excluded</code>
+list.  In the example above, when <code>OS</code> is <code>mac</code>, <code>sources_excluded</code>
+would be set to <code>[&apos;io_win.cc&apos;, &apos;platform_util_linux.cc&apos;]</code>.  Some GYP
+generators use this feature to display excluded files in the project
+files they generate for the convenience of users, who may wish to refer
+to other implementations.</p>
+<h2 id="processing-order">Processing Order</h2>
+<p>GYP uses a defined and predictable order to execute the various steps
+performed between loading files and generating output.</p>
+<ul>
+<li>Load files.<ul>
+<li>Load <code>.gyp</code> files.  Merge any <a href="#Including_Other_Files">command-line
+includes</a> into each <code>.gyp</code> file&#x2019;s root
+dictionary.  As <a href="#Including_Other_Files">includes</a> are found,
+load them as well and <a href="#Merging">merge</a> them into the scope in
+which the <a href="#includes">includes</a> section was found.</li>
+<li>Perform <a href="#Early_and_Late_Phases">&#x201C;early&#x201D; or &#x201C;pre&#x201D;</a> <a href="#Variables_and_Conditionals">variable
+expansion and conditional
+evaluation</a>.</li>
+<li><a href="#Merging">Merge</a> each <a href="#targets">target&#x2019;s</a> dictionary into
+the <code>.gyp</code> file&#x2019;s root <a href="#target_defaults">target_defaults</a>
+dictionary.</li>
+<li>Scan each <a href="#targets">target</a> for
+<a href="#dependencies">dependencies</a>, and repeat the above steps for
+any newly-referenced <code>.gyp</code> files not yet loaded.</li>
+</ul>
+</li>
+<li>Scan each <a href="#targets">target</a> for wildcard
+<a href="#dependencies">dependencies</a>, expanding the wildcards.</li>
+<li>Process <a href="#Dependent_Settings">dependent settings</a>.  These
+sections are processed, in order:<ul>
+<li><a href="#all_dependent_settings">all_dependent_settings</a></li>
+<li><a href="#direct_dependent_settings">direct_dependent_settings</a></li>
+<li><a href="#link_dependent_settings">link_dependent_settings</a></li>
+</ul>
+</li>
+<li>Perform <a href="#Linking_Dependencies">static library dependency
+adjustment</a>.</li>
+<li>Perform <a href="#Early_and_Late_Phases">&#x201C;late,&#x201D; &#x201C;post,&#x201D; or &#x201C;target&#x201D;</a>
+<a href="#Variables_and_Conditionals">variable expansion and conditional
+evaluation</a> on <a href="#targets">target</a>
+dictionaries.</li>
+<li>Merge <a href="#targets">target</a> settings into
+<a href="#configurations">configurations</a> as appropriate.</li>
+<li>Process <a href="#List_Exclusions_and_Patterns">exclusion and pattern
+lists</a>.</li>
+</ul>
+<h2 id="settings-keys">Settings Keys</h2>
+<h3 id="settings-that-may-appear-anywhere">Settings that may appear anywhere</h3>
+<h4 id="conditions">conditions</h4>
+<p><em>List of <code>condition</code> items</em></p>
+<p>A <code>conditions</code> section introduces a subdictionary that is only merged
+into the enclosing scope based on the evaluation of a conditional
+expression.  Each <code>condition</code> within a <code>conditions</code> list is itself a
+list of at least two items:</p>
+<ol>
+<li>A string containing the conditional expression itself.  Conditional
+expressions may take the following forms:<ul>
+<li>For string values, <code>var==&quot;value&quot;</code> and <code>var!=&quot;value&quot;</code> to test
+equality and inequality.  For example, <code>&apos;OS==&quot;linux&quot;&apos;</code> is true
+when the <code>OS</code> variable is set to <code>&quot;linux&quot;</code>.</li>
+<li>For integer values, <code>var==value</code>, <code>var!=value</code>, <code>var&lt;value</code>,
+<code>var&lt;=value</code>, <code>var&gt;=value</code>, and <code>var&gt;value</code>, to test equality and
+several common forms of inequality.  For example,
+<code>&apos;chromium_code==0&apos;</code> is true when the <code>chromium_code</code> variable is
+set to <code>0</code>.</li>
+<li>It is an error for a conditional expression to reference any
+undefined variable.</li>
+</ul>
+</li>
+<li>A dictionary containing the subdictionary to be merged into the
+enclosing scope if the conditional expression evaluates to true.</li>
+</ol>
+<p>These two items can be followed by any number of similar two items that
+will be evaluated if the previous conditional expression does not
+evaluate to true.</p>
+<p>An additional optional dictionary can be appended to this sequence of
+two items.  This optional dictionary will be merged into the enclosing
+scope if none of the conditional expressions evaluate to true.</p>
+<p>Within a <code>conditions</code> section, each item is processed sequentially, so
+it is possible to predict the order in which operations will occur.</p>
+<p>There is no restriction on nesting <code>conditions</code> sections.</p>
+<p><code>conditions</code> sections are very similar to <code>target_conditions</code> sections.
+See target_conditions.</p>
+<h4 id="example">Example</h4>
+<pre><code>{
+  &apos;sources&apos;: [
+    &apos;common.cc&apos;,
+  ],
+  &apos;conditions&apos;: [
+    [&apos;OS==&quot;mac&quot;&apos;, {&apos;sources&apos;: [&apos;mac_util.mm&apos;]}],
+    [&apos;OS==&quot;win&quot;&apos;, {&apos;sources&apos;: [&apos;win_main.cc&apos;]}, {&apos;sources&apos;: [&apos;posix_main.cc&apos;]}],
+    [&apos;OS==&quot;mac&quot;&apos;, {&apos;sources&apos;: [&apos;mac_impl.mm&apos;]},
+     &apos;OS==&quot;win&quot;&apos;, {&apos;sources&apos;: [&apos;win_impl.cc&apos;]},
+     {&apos;sources&apos;: [&apos;default_impl.cc&apos;]}
+    ],
+  ],
+}
+</code></pre><p>Given this input, the <code>sources</code> list will take on different values based
+on the <code>OS</code> variable.</p>
+<ul>
+<li>If <code>OS</code> is <code>&quot;mac&quot;</code>, <code>sources</code> will contain <code>[&apos;common.cc&apos;,
+&apos;mac_util.mm&apos;, &apos;posix_main.cc&apos;, &apos;mac_impl.mm&apos;]</code>.</li>
+<li>If <code>OS</code> is <code>&quot;win&quot;</code>, <code>sources</code> will contain <code>[&apos;common.cc&apos;,
+&apos;win_main.cc&apos;, &apos;win_impl.cc&apos;]</code>.</li>
+<li>If <code>OS</code> is any other value such as <code>&quot;linux&quot;</code>, <code>sources</code> will contain
+<code>[&apos;common.cc&apos;, &apos;posix_main.cc&apos;, &apos;default_impl.cc&apos;]</code>.</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="UserDocumentation.html" class="navigation navigation-prev " aria-label="Previous page: User documentation">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="LanguageSpecification.html" class="navigation navigation-next " aria-label="Next page: Language specification">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Input Format Reference","level":"1.3","depth":1,"next":{"title":"Language specification","level":"1.4","depth":1,"path":"docs/LanguageSpecification.md","ref":"docs/LanguageSpecification.md","articles":[]},"previous":{"title":"User documentation","level":"1.2","depth":1,"path":"docs/UserDocumentation.md","ref":"docs/UserDocumentation.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/InputFormatReference.md","mtime":"2016-06-04T08:29:47.000Z","type":"markdown"},"gitbook":{"version":"3.0.3","time":"2016-06-04T08:37:41.485Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/buttons.js"></script>
+        
+    
+
+    </body>
+</html>
+

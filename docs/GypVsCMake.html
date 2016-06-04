@@ -1,0 +1,416 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <title>GYP vs. CMake · GitBook</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.0.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="Testing.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Readme
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="UserDocumentation.html">
+            
+                <a href="UserDocumentation.html">
+            
+                    
+                    User documentation
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="InputFormatReference.html">
+            
+                <a href="InputFormatReference.html">
+            
+                    
+                    Input Format Reference
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="LanguageSpecification.html">
+            
+                <a href="LanguageSpecification.html">
+            
+                    
+                    Language specification
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="Hacking.html">
+            
+                <a href="Hacking.html">
+            
+                    
+                    Hacking
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.6" data-path="Testing.html">
+            
+                <a href="Testing.html">
+            
+                    
+                    Testing
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.7" data-path="GypVsCMake.html">
+            
+                <a href="GypVsCMake.html">
+            
+                    
+                    GYP vs. CMake
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >GYP vs. CMake</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="vs-cmake">vs. CMake</h1>
+<p>GYP was originally created to generate native IDE project files (Visual Studio, Xcode) for building <a href="http://www.chromim.org" _target="blank">Chromium</a>.</p>
+<p>The functionality of GYP is very similar to the <a href="http://www.cmake.org" _target="blank">CMake</a>
+build tool.  Bradley Nelson wrote up the following description of why the team
+created GYP instead of using CMake.  The text below is copied from
+<a href="http://www.mail-archive.com/webkit-dev@lists.webkit.org/msg11029.html" _target="blank">http://www.mail-archive.com/webkit-dev@lists.webkit.org/msg11029.html</a></p>
+<pre><code>
+Re: [webkit-dev] CMake as a build system?
+Bradley Nelson
+Mon, 19 Apr 2010 22:38:30 -0700
+
+Here&apos;s the innards of an email with a laundry list of stuff I came up with a
+while back on the gyp-developers list in response to Mike Craddick regarding
+what motivated gyp&apos;s development, since we were aware of cmake at the time
+(we&apos;d even started a speculative port):
+
+
+I did an exploratory port of portions of Chromium to cmake (I think I got as
+far as net, base, sandbox, and part of webkit).
+There were a number of motivations, not all of which would apply to other
+projects. Also, some of the design of gyp was informed by experience at
+Google with large projects built wholly from source, leading to features
+absent from cmake, but not strictly required for Chromium.
+
+1. Ability to incrementally transition on Windows. It took us about 6 months
+to switch fully to gyp. Previous attempts to move to scons had taken a long
+time and failed, due to the requirement to transition while in flight. For a
+substantial period of time, we had a hybrid of checked in vcproj and gyp generated
+vcproj. To this day we still have a good number of GUIDs pinned in the gyp files,
+because different parts of our release pipeline have leftover assumptions
+regarding manipulating the raw sln/vcprojs. This transition occurred from
+the bottom up, largely because modules like base were easier to convert, and
+had a lower churn rate. During early stages of the transition, the majority
+of the team wasn&apos;t even aware they were using gyp, as it integrated into
+their existing workflow, and only affected modules that had been converted.
+
+2. Generation of a more &apos;normal&apos; vcproj file. Gyp attempts, particularly on
+Windows, to generate vcprojs which resemble hand generated projects. It
+doesn&apos;t generate any Makefile type projects, but instead produces msvs
+Custom Build Steps and Custom Build Rules. This makes the resulting projects
+easier to understand from the IDE and avoids parts of the IDE that simply
+don&apos;t function correctly if you use Makefile projects. Our early hope with
+gyp was to support the least common denominator of features present in each
+of the platform specific project file formats, rather than falling back on
+generated Makefiles/shell scripts to emulate some common abstraction. CMake by
+comparison makes a good faith attempt to use native project features, but
+falls back on generated scripts in order to preserve the same semantics on
+each platforms.
+
+3. Abstraction on the level of project settings, rather than command line
+flags. In gyp&apos;s syntax you can add nearly any option present in a hand
+generated xcode/vcproj file. This allows you to use abstractions built into
+the IDEs rather than reverse engineering them possibly incorrectly for
+things like: manifest generation, precompiled headers, bundle generation.
+When somebody wants to use a particular menu option from msvs, I&apos;m able to
+do a web search on the name of the setting from the IDE and provide them
+with a gyp stanza that does the equivalent. In many cases, not all project
+file constructs correspond to command line flags.
+
+4. Strong notion of module public/private interface. Gyp allows targets to
+publish a set of direct_dependent_settings, specifying things like
+include_dirs, defines, platforms specific settings, etc. This means that
+when module A depends on module B, it automatically acquires the right build
+settings without module A being filled with assumptions/knowledge of exactly
+how module B is built. Additionally, all of the transitive dependencies of
+module B are pulled in. This avoids their being a single top level view of
+the project, rather each gyp file expresses knowledge about its immediate
+neighbors. This keep local knowledge local. CMake effectively has a large
+shared global namespace.
+
+5. Cross platform generation. CMake is not able to generate all project
+files on all platforms. For example xcode projects cannot be generated from
+windows (cmake uses mac specific libraries to do project generation). This
+means that for instance generating a tarball containing pregenerated
+projects for all platforms is hard with Cmake (requires distribution to
+several machine types).
+
+6. Gyp has rudimentary cross compile support. Currently we&apos;ve added enough
+functionality to gyp to support x86 -&gt; arm cross compiles. Last I checked
+this functionality wasn&apos;t present in cmake. (This occurred later).
+
+
+That being said there are a number of drawbacks currently to gyp:
+
+1. Because platform specific settings are expressed at the project file
+level (rather than the command line level). Settings which might otherwise
+be shared in common between platforms (flags to gcc on mac/linux), end up
+being repeated twice. Though in fairness there is actually less sharing here
+than you&apos;d think. include_dirs and defines actually represent 90% of what
+can be typically shared.
+
+2. CMake may be more mature, having been applied to a broader range of
+projects. There a number of &apos;tool modules&apos; for cmake, which are shared in a
+common community.
+
+3. gyp currently makes some nasty assumptions about the availability of
+chromium&apos;s hermetic copy of cygwin on windows. This causes you to either
+have to special case a number of rules, or swallow this copy of cygwin as a
+build time dependency.
+
+4. CMake includes a fairly readable imperative language. Currently Gyp has a
+somewhat poorly specified declarative language (variable expansion happens
+in sometimes weird and counter-intuitive ways). In fairness though, gyp assumes
+that external python scripts can be used as an escape hatch. Also gyp avoids
+a lot of the things you&apos;d need imperative code for, by having a nice target
+settings publication mechanism.
+
+5. (Feature/drawback depending on personal preference). Gyp&apos;s syntax is
+DEEPLY nested. It suffers from all of Lisp&apos;s advantages and drawbacks.
+
+-BradN
+</code></pre>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="Testing.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Testing">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"GYP vs. CMake","level":"1.7","depth":1,"previous":{"title":"Testing","level":"1.6","depth":1,"path":"docs/Testing.md","ref":"docs/Testing.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/GypVsCMake.md","mtime":"2016-06-04T08:29:47.000Z","type":"markdown"},"gitbook":{"version":"3.0.3","time":"2016-06-04T08:37:41.485Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-livereload/plugin.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/buttons.js"></script>
+        
+    
+
+    </body>
+</html>
+
