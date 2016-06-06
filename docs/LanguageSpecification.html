@@ -358,37 +358,124 @@ system</li>
 targets and how they&apos;re to be built.</p>
 <p>The following keywords are meaningful within the top-level dictionary
 definition:</p>
-<p>|:-------------     |:------------------|
-| <code>conditions</code>      | A conditional section that may contain other items that can be present in a top-level dictionary, on a conditional basis.  See the &quot;Conditionals&quot; section below. |
-| <code>includes</code>        | A list of <code>.gypi</code> files to be included in the top-level dictionary. |
-| <code>target_defaults</code> | A dictionary of default settings to be inherited by all targets in the top-level dictionary.  See the &quot;Settings keywords&quot; section below. |
-| <code>targets</code>         | A list of target specifications.  See the &quot;targets&quot; below. |
-| <code>variables</code>       | A dictionary containing variable definitions.  Each key in this dictionary is the name of a variable, and each value must be a string value that the variable is to be set to. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Key</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>conditions</code></td>
+<td style="text-align:left">A conditional section that may contain other items that can be present in a top-level dictionary, on a conditional basis.  See the &quot;Conditionals&quot; section below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>includes</code></td>
+<td style="text-align:left">A list of <code>.gypi</code> files to be included in the top-level dictionary.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>target_defaults</code></td>
+<td style="text-align:left">A dictionary of default settings to be inherited by all targets in the top-level dictionary.  See the &quot;Settings keywords&quot; section below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>targets</code></td>
+<td style="text-align:left">A list of target specifications.  See the &quot;targets&quot; below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>variables</code></td>
+<td style="text-align:left">A dictionary containing variable definitions.  Each key in this dictionary is the name of a variable, and each value must be a string value that the variable is to be set to.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="targets">targets</h3>
 <p>A list of dictionaries defining targets to be built by the files
 generated from this <code>.gyp</code> file.</p>
 <p>Targets may contain <code>includes</code>, <code>conditions</code>, and <code>variables</code> sections
 as permitted in the root dictionary. The following additional keywords
 have structural meaning for target definitions:</p>
-<p>|:----------                   |:------------------------------------------|
-| <code>actions</code>                    | A list of special custom actions to perform on a specific input file, or files, to produce output files.  See the &quot;Actions&quot; section below. |
-| <code>all_dependent_settings</code>     | A dictionary of settings to be applied to all dependents of the target, transitively.  This includes direct dependents and the entire set of their dependents, and so on.  This section may contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare <code>direct_dependent_settings</code> and <code>link_settings</code>. |
-| <code>configurations</code>             | A list of dictionaries defining build configurations for the target.  See the &quot;Configurations&quot; section below.  |
-| <code>copies</code>                     | A list of copy actions to perform. See the &quot;Copies&quot; section below. |
-| <code>defines</code>                    | A list of preprocesor definitions to be passed on the command line to the C/C++ compiler (via <code>-D</code> or <code>/D</code> options). |
-| <code>dependencies</code>               | A list of targets on which this target depends.  Targets in other <code>.gyp</code> files are specified as <code>../path/to/other.gyp:target_we_want</code>. |
-| <code>direct_dependent_settings</code>  | A dictionary of settings to be applied to other targets that depend on this target.  These settings will only be applied to direct dependents.  This section may contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare with <code>all_dependent_settings</code> and <code>link_settings</code>. |
-| <code>include_dirs</code>               | A list of include directories to be passed on the command line to the C/C++ compiler (via <code>-I</code> or <code>/I</code> options). |
-| <code>libraries</code>                  | A list of list of libraries (and/or frameworks) on which this target depends. |
-| <code>link_settings</code>              | A dictionary of settings to be applied to targets in which this target&apos;s contents are linked.  <code>executable</code> and <code>shared_library</code> targets are linkable, so if they depend on a non-linkable target such as a <code>static_library</code>, they will adopt its <code>link_settings</code>.  This section can contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare <code>all_dependent_settings</code> and <code>direct_dependent_settings</code>. |
-| <code>rules</code>                      | A special custom action to perform on a list of input files, to produce output files.  See the &quot;Rules&quot; section below. |
-| <code>sources</code>                    | A list of source files that are used to build this target or which should otherwise show up in the IDE for this target.  In practice, we expect this list to be a union of all files necessary to build the target on all platforms, as well as other related files that aren&apos;t actually used for building, like README files. |
-| <code>target_conditions</code>          | Like <code>conditions</code>, but evaluation is delayed until the settings have been merged into an actual target.  <code>target_conditions</code> may be used to place conditionals into a <code>target_defaults</code> section but have them still depend on specific target settings. |
-| <code>target_name</code>                | The name of a target being defined. |
-| <code>type</code>                       | The type of target being defined. This field currently supports <code>executable</code>, <code>static_library</code>, <code>shared_library</code>, and <code>none</code>.  The <code>none</code> target type is useful when producing output which is not linked. For example, converting raw translation files into resources or documentation into platform specific help files. |
-| <code>msvs_props</code>                 | A list of Visual Studio property sheets (<code>.vsprops</code> files) to be used to build the target. |
-| <code>xcode_config_file</code>          | An Xcode configuration (<code>.xcconfig</code> file) to be used to build the target. |
-| <code>xcode_framework_dirs</code>       | A list of framework directories be used to build the target. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Key</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>actions</code></td>
+<td style="text-align:left">A list of special custom actions to perform on a specific input file, or files, to produce output files.  See the &quot;Actions&quot; section below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>all_dependent_settings</code></td>
+<td style="text-align:left">A dictionary of settings to be applied to all dependents of the target, transitively.  This includes direct dependents and the entire set of their dependents, and so on.  This section may contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare <code>direct_dependent_settings</code> and <code>link_settings</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>configurations</code></td>
+<td style="text-align:left">A list of dictionaries defining build configurations for the target.  See the &quot;Configurations&quot; section below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>copies</code></td>
+<td style="text-align:left">A list of copy actions to perform. See the &quot;Copies&quot; section below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>defines</code></td>
+<td style="text-align:left">A list of preprocesor definitions to be passed on the command line to the C/C++ compiler (via <code>-D</code> or <code>/D</code> options).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>dependencies</code></td>
+<td style="text-align:left">A list of targets on which this target depends.  Targets in other <code>.gyp</code> files are specified as <code>../path/to/other.gyp:target_we_want</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>direct_dependent_settings</code></td>
+<td style="text-align:left">A dictionary of settings to be applied to other targets that depend on this target.  These settings will only be applied to direct dependents.  This section may contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare with <code>all_dependent_settings</code> and <code>link_settings</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>include_dirs</code></td>
+<td style="text-align:left">A list of include directories to be passed on the command line to the C/C++ compiler (via <code>-I</code> or <code>/I</code> options).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>libraries</code></td>
+<td style="text-align:left">A list of list of libraries (and/or frameworks) on which this target depends.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>link_settings</code></td>
+<td style="text-align:left">A dictionary of settings to be applied to targets in which this target&apos;s contents are linked.  <code>executable</code> and <code>shared_library</code> targets are linkable, so if they depend on a non-linkable target such as a <code>static_library</code>, they will adopt its <code>link_settings</code>.  This section can contain anything found within a <code>target</code> dictionary, except <code>configurations</code>, <code>target_name</code>, and <code>type</code> sections.  Compare <code>all_dependent_settings</code> and <code>direct_dependent_settings</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>rules</code></td>
+<td style="text-align:left">A special custom action to perform on a list of input files, to produce output files.  See the &quot;Rules&quot; section below.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>sources</code></td>
+<td style="text-align:left">A list of source files that are used to build this target or which should otherwise show up in the IDE for this target.  In practice, we expect this list to be a union of all files necessary to build the target on all platforms, as well as other related files that aren&apos;t actually used for building, like README files.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>target_conditions</code></td>
+<td style="text-align:left">Like <code>conditions</code>, but evaluation is delayed until the settings have been merged into an actual target.  <code>target_conditions</code> may be used to place conditionals into a <code>target_defaults</code> section but have them still depend on specific target settings.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>target_name</code></td>
+<td style="text-align:left">The name of a target being defined.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>type</code></td>
+<td style="text-align:left">The type of target being defined. This field currently supports <code>executable</code>, <code>static_library</code>, <code>shared_library</code>, and <code>none</code>.  The <code>none</code> target type is useful when producing output which is not linked. For example, converting raw translation files into resources or documentation into platform specific help files.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>msvs_props</code></td>
+<td style="text-align:left">A list of Visual Studio property sheets (<code>.vsprops</code> files) to be used to build the target.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xcode_config_file</code></td>
+<td style="text-align:left">An Xcode configuration (<code>.xcconfig</code> file) to be used to build the target.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xcode_framework_dirs</code></td>
+<td style="text-align:left">A list of framework directories be used to build the target.</td>
+</tr>
+</tbody>
+</table>
 <p>You can affect the way that lists/dictionaries are merged together (for
 example the way a list in target_defaults interacts with the same named
 list in the target itself) with a couple of special characters, which
@@ -411,8 +498,20 @@ a target dictionary, except for <code>actions</code>, <code>all_dependent_settin
 <code>configurations</code>, <code>dependencies</code>, <code>direct_dependent_settings</code>,
 <code>libraries</code>, <code>link_settings</code>, <code>sources</code>, <code>target_name</code>, and <code>type</code>.</p>
 <p>Configuration dictionaries may also contain these elements:</p>
-<p>|:---------------------|:----------------------------------------------------|
-| <code>configuration_name</code> | Required attribute.  The name of the configuration. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Key</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>configuration_name</code></td>
+<td style="text-align:left">Required attribute.  The name of the configuration.</td>
+</tr>
+</tbody>
+</table>
 <h3 id="conditionals">Conditionals</h3>
 <p>Conditionals may appear within any dictionary in a <code>.gyp</code> file.  There
 are two tpes of conditionals, which differ only in the timing of their
@@ -435,12 +534,42 @@ execution of arbitrary Python code.</p>
 <p>An <code>actions</code> section provides a list of custom build actions to perform
 on inputs, producing outputs.  The <code>actions</code> section is organized as a
 list.  Each item in the list is a dictionary having the following form:</p>
-<p>|:--------------|:-------|:-----------------------------|
-| <code>action_name</code> | string | The name of the action.  Depending on how actions are implemented in the various generators, some may desire or require this property to be set to a unique name; others may ignore this property entirely. |
-| <code>inputs</code>      | list   | A list of pathnames treated as inputs to the custom action. |
-| <code>outputs</code>     | list   | A list of pathnames that the custom action produces. |
-| <code>action</code>      | list   | A command line invocation used to produce <code>outputs</code> from <code>inputs</code>.  For maximum cross-platform compatibility, invocations that require a Python interpreter should be specified with a first element <code>&quot;python&quot;</code>.  This will enable generators for environments with specialized Python installations to be able to perform the action in an appropriate Python environment. |
-| <code>message</code>     | string | A message to be displayed to the user by the build system when the action is run. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Key</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>action_name</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">The name of the action.  Depending on how actions are implemented in the various generators, some may desire or require this property to be set to a unique name; others may ignore this property entirely.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>inputs</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">A list of pathnames treated as inputs to the custom action.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>outputs</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">A list of pathnames that the custom action produces.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>action</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">A command line invocation used to produce <code>outputs</code> from <code>inputs</code>.  For maximum cross-platform compatibility, invocations that require a Python interpreter should be specified with a first element <code>&quot;python&quot;</code>.  This will enable generators for environments with specialized Python installations to be able to perform the action in an appropriate Python environment.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>message</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">A message to be displayed to the user by the build system when the action is run.</td>
+</tr>
+</tbody>
+</table>
 <p>Build environments will compare <code>inputs</code> and <code>outputs</code>.  If any <code>output</code>
 is missing or is outdated relative to any <code>input</code>, the custom action
 will be invoked.  If all <code>outputs</code> are present and newer than all
@@ -483,20 +612,78 @@ duplication of pathnames:</p>
 <p>A <code>rules</code> section provides custom build action to perform on inputs, producing
 outputs.  The <code>rules</code> section is organized as a list.  Each item in the list is
 a dictionary having the following form:</p>
-<p>|:------------|:-------|:-----------------------------------------|
-| <code>rule_name</code> | string | The name of the rule.  Depending on how Rules are implemented in the various generators, some may desire or require this property to be set to a unique name; others may ignore this property entirely. |
-| <code>extension</code> | string | All source files of the current target with the given extension will be treated successively as inputs to the rule. |
-| <code>inputs</code>    | list   | Additional dependencies of the rule. |
-| <code>outputs</code>   | list   | A list of pathnames that the rule produces. Has access to <code>RULE_INPUT_</code> variables (see below). |
-| <code>action</code>    | list   | A command line invocation used to produce <code>outputs</code> from <code>inputs</code>.  For maximum cross-platform compatibility, invocations that require a Python interpreter should be specified with a first element <code>&quot;python&quot;</code>.  This will enable generators for environments with specialized Python installations to be able to perform the action in an appropriate Python environment. Has access to <code>RULE_INPUT_</code> variables (see below). |
-| <code>message</code>   | string | A message to be displayed to the user by the build system when the action is run. Has access to <code>RULE_INPUT_</code> variables (see below). |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Key</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>rule_name</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">The name of the rule.  Depending on how Rules are implemented in the various generators, some may desire or require this property to be set to a unique name; others may ignore this property entirely.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>extension</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">All source files of the current target with the given extension will be treated successively as inputs to the rule.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>inputs</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">Additional dependencies of the rule.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>outputs</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">A list of pathnames that the rule produces. Has access to <code>RULE_INPUT_</code> variables (see below).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>action</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">A command line invocation used to produce <code>outputs</code> from <code>inputs</code>.  For maximum cross-platform compatibility, invocations that require a Python interpreter should be specified with a first element <code>&quot;python&quot;</code>.  This will enable generators for environments with specialized Python installations to be able to perform the action in an appropriate Python environment. Has access to <code>RULE_INPUT_</code> variables (see below).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>message</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">A message to be displayed to the user by the build system when the action is run. Has access to <code>RULE_INPUT_</code> variables (see below).</td>
+</tr>
+</tbody>
+</table>
 <p>There are several variables available to <code>outputs</code>, <code>action</code>, and <code>message</code>.</p>
-<p>|:---------------------|:------------------------------------|
-| <code>RULE_INPUT_PATH</code>    | The full path to the current input. |
-| <code>RULE_INPUT_DIRNAME</code> | The directory of the current input. |
-| <code>RULE_INPUT_NAME</code>    | The file name of the current input. |
-| <code>RULE_INPUT_ROOT</code>    | The file name of the current input without extension. |
-| <code>RULE_INPUT_EXT</code>     | The file name extension of the current input. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Variable</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>RULE_INPUT_PATH</code></td>
+<td style="text-align:left">The full path to the current input.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>RULE_INPUT_DIRNAME</code></td>
+<td style="text-align:left">The directory of the current input.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>RULE_INPUT_NAME</code></td>
+<td style="text-align:left">The file name of the current input.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>RULE_INPUT_ROOT</code></td>
+<td style="text-align:left">The file name of the current input without extension.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>RULE_INPUT_EXT</code></td>
+<td style="text-align:left">The file name extension of the current input.</td>
+</tr>
+</tbody>
+</table>
 <p>Rules can be thought of as Action generators. For each source selected
 by <code>extension</code> an special action is created. This action starts out with
 the same <code>inputs</code>, <code>outputs</code>, <code>action</code>, and <code>message</code> as the rule. The
@@ -509,9 +696,27 @@ source.</p>
 <p>A <code>copies</code> section provides a simple means of copying files.  The
 <code>copies</code> section is organized as a list.  Each item in the list is a
 dictionary having the following form:</p>
-<p>|:--------------|:-------|:------------------------------|
-| <code>destination</code> | string | The directory into which the <code>files</code> will be copied. |
-| <code>files</code>       | list   | A list of files to be copied. |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Key</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>destination</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">The directory into which the <code>files</code> will be copied.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>files</code></td>
+<td style="text-align:left">list</td>
+<td style="text-align:left">A list of files to be copied.</td>
+</tr>
+</tbody>
+</table>
 <p>The copies will be created in <code>destination</code> and have the same file name
 as the file they are copied from. Even if the <code>files</code> are from multiple
 directories they will all be copied into the <code>destination</code> directory.
@@ -678,7 +883,7 @@ specific to Chromium, some typical of other projects in the same ballpark):<ul>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"Language specification","level":"1.4","depth":1,"next":{"title":"Hacking","level":"1.5","depth":1,"path":"docs/Hacking.md","ref":"docs/Hacking.md","articles":[]},"previous":{"title":"Input Format Reference","level":"1.3","depth":1,"path":"docs/InputFormatReference.md","ref":"docs/InputFormatReference.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/LanguageSpecification.md","mtime":"2016-06-04T08:50:37.000Z","type":"markdown"},"gitbook":{"version":"3.0.3","time":"2016-06-04T08:37:41.485Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"Language specification","level":"1.4","depth":1,"next":{"title":"Hacking","level":"1.5","depth":1,"path":"docs/Hacking.md","ref":"docs/Hacking.md","articles":[]},"previous":{"title":"Input Format Reference","level":"1.3","depth":1,"path":"docs/InputFormatReference.md","ref":"docs/InputFormatReference.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"docs/LanguageSpecification.md","mtime":"2016-06-06T03:01:16.006Z","type":"markdown"},"gitbook":{"version":"3.0.3","time":"2016-06-06T02:57:41.013Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
